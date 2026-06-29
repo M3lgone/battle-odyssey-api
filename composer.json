@@ -7,8 +7,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "knuckleswtf/scribe": "^5.11",
         "laravel/framework": "^13.8",
         "laravel/passport": "^13.7",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0"
     },
     "require-dev": {

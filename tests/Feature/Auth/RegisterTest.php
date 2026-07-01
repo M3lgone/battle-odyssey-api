@@ -12,4 +12,11 @@ it('registers a user', function () {
     $response = $this->postJson('/api/v1/auth/register', $data);
 
     $response->assertCreated();
+
+    $this->assertDatabaseHas('users', [
+        'email' => 'isma@gmail.com',
+        'role' => 'player',
+    ]);
 });
+
+

@@ -40,3 +40,17 @@ it('fails validation if email is already taken', function () {
              ->assertJsonValidationErrors(['email']);
 });
 
+it('fails validation if password is too short', function () {
+    $data = [
+        'name' => 'Alex',
+        'email' => 'alex@gmail.com',
+        'password' => '12345', 
+        'password_confirmation' => '12345', 
+    ];
+
+    $response = $this->postJson('/api/v1/auth/register', $data);
+
+    $response->assertStatus(422)
+             ->assertJsonValidationErrors(['password']);
+});
+

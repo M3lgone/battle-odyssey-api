@@ -8,8 +8,16 @@ use Illuminate\Http\Request;
 class LogoutController extends Controller
 {
     /**
-     * Handle the incoming request.
-     */
+    * @group Auth
+    * 
+    * Logout
+    * 
+    * @authenticated
+    * 
+    * @response 200 {"message": "Logged out successfully"}
+    * @response 401 {"message": "Unauthenticated."}
+    */
+
     public function __invoke(Request $request)
     {
         $request->user('api')->token()->revoke();

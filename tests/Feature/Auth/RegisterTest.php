@@ -54,3 +54,17 @@ it('fails validation if password is too short', function () {
              ->assertJsonValidationErrors(['password']);
 });
 
+it('fails if passwords are not the same', function () {
+    $data = [
+        'name' => 'Alex',
+        'email' => 'alex@gmail.com',
+        'password' => '12345',
+        'password_confirmation' => 'bad12345',
+    ];
+
+    $response = $this->postJson('/api/v1/auth/register', $data);
+
+    $response->assertStatus(422)
+             ->assertJsonValidationErrors(['password']);
+});
+

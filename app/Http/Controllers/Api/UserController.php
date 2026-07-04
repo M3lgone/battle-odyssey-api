@@ -9,10 +9,43 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    /**
+    * @group Profile
+    * 
+    * Show user profile
+    *
+    * @authenticated
+    *  
+    * @urlParam user integer required The user ID. Example: 1
+    * 
+    * @response 200 {"id": 1, "name": "Ismael", "email": "isma@gmail.com", "role": "player"}
+    * @response 401 {"message": "Unauthenticated."}
+    * @response 404 {"message": "User not found"}
+    */
+
     public function show(Request $request, User $user)
     {
         return response()->json($user, 200);
     }
+
+     /**
+    * @group Profile
+    * 
+    * Update user profile
+    *
+    * @authenticated
+    *  
+    * @urlParam user integer required The user ID. Example: 1
+    * 
+    * @bodyParam name string The user's name. Example: Updated name
+    * @bodyParam email string The user's email. Example: isma@gmail.com
+    * @bodyParam password string Minimum 8 characters. Example: password123
+    * @bodyParam password_confirmation string Must match password. Example: password123
+    * 
+    * @response 200 {"id": 1, "name": "Updated name", "email": "isma@gmail.com", "role": "player"}
+    * @response 403 {"message": "Forbidden"}
+    * @response 422 {"message": "The email has already been taken."}
+    */
 
     public function update(Request $request, User $user)
     {
@@ -34,6 +67,18 @@ class UserController extends Controller
 
         return response()->json($user, 200);
     }
+
+    /**
+    * @group Profile
+    * 
+    * Delete user profile
+    *
+    * @authenticated
+    * 
+    * @urlParam user integer required The user ID. Example: 1
+    * 
+    * @response 200 {"message": "User deleted successfully"}
+    */
 
     public function destroy(Request $request, User $user)
     {

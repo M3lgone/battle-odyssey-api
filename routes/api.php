@@ -20,5 +20,6 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/users', [AdminUserController::class, 'index']);
+    Route::get('/users/{user}', [AdminUserController::class, 'show']);
     });
 });

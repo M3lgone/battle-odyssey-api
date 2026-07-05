@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\Admin\AdminUserController;
 
 Route::prefix('v1')->group(function () {
     Route::post('/auth/register', RegisterController::class);
@@ -15,5 +16,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/users/{user}', [UserController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
         Route::post('/auth/logout', LogoutController::class);    
+    });
+
+    Route::middleware(['auth:api', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/users', [AdminUserController::class, 'index']);
     });
 });

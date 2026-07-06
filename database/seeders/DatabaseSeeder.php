@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
         AdminSeeder::class,
+        CharacterSeeder::class,
+        SkillSeeder::class,
+        CharacterHasSkillSeeder::class,
+
     ]);
     }
 }

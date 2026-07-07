@@ -26,6 +26,7 @@ class AdminUserController extends Controller
             'name' => 'sometimes|string|max:60',
             'email' => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'sometimes|string|min:8|confirmed',
+            'role' => 'sometimes|in:player,admin',
         ]);
 
         if (isset($validated['password'])) {

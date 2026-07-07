@@ -27,4 +27,5 @@ use App\Http\Controllers\Api\CharacterController;
     });
 
     Route::get('/characters', [CharacterController::class, 'index']);
+    Route::get('/characters/{character}', [CharacterController::class, 'show']);
 });

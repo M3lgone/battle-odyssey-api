@@ -13,4 +13,10 @@ class CharacterController extends Controller
         $characters = Character::all();
         return response()->json($characters, 200);
     }
+
+    public function show(Character $character)
+    {
+        $character->load('skills');
+        return response()->json($character, 200);
+    }
 }

@@ -15,8 +15,9 @@ it('registers a user', function () {
 
     $response->assertCreated()
              ->assertJsonStructure([
-                'user' => ['name', 'email']
-                ]);
+                'message',
+                'user' => ['id', 'name', 'email'],
+             ]);
 
     $this->assertDatabaseHas('users', [
         'name' => 'Ismael',
@@ -61,7 +62,7 @@ it('fails if passwords are not the same', function () {
     $data = [
         'name' => 'Alex',
         'email' => 'alex@gmail.com',
-        'password' => '12345',
+        'password' => 'good12345',
         'password_confirmation' => 'bad12345',
     ];
 

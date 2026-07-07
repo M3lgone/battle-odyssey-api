@@ -10,12 +10,15 @@ beforeEach(function () {
 });
 
 it('logout user and revoke token', function () {
+    $user = User::factory()->create();
 
-   $user = User::factory()->create();
+    $token = $user->createToken('api-token')->accessToken;
 
-    Passport::actingAs($user);
+    $this->assertEquals(1, $user->tokens()->where('revoked', false)->count());
 
-    $response = $this->postJson('/api/v1/auth/logout');
+    $response = $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+    ])->postJson('/api/v1/auth/logout');
 
     $response->assertStatus(200)
              ->assertJson(['message' => 'Logged out successfully']);

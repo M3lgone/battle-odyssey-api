@@ -14,7 +14,7 @@ class CharacterSeeder extends Seeder
     public function run(): void
     {
         Character::create([
-            'class' => 'warrior',
+            'class' => 'Warrior',
             'attack' => 15,
             'defense' => 20,
             'max_health_points' => 120,
@@ -22,7 +22,7 @@ class CharacterSeeder extends Seeder
         ]);
 
         Character::create([
-            'class' => 'mage',
+            'class' => 'Mage',
             'attack' => 10,
             'defense' => 15,
             'max_health_points' => 100,
@@ -30,7 +30,7 @@ class CharacterSeeder extends Seeder
         ]);
 
         Character::create([
-            'class' => 'archer',
+            'class' => 'Archer',
             'attack' => 25,
             'defense' => 15,
             'max_health_points' => 100,

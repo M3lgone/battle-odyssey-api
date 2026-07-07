@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Character;
+use App\Models\Skill;
 
 class CharacterHasSkillSeeder extends Seeder
 {
@@ -13,9 +15,17 @@ class CharacterHasSkillSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('character_has_skill')->insert([
-            'character_id' => 1,
-            'skill_id' => 1,
+        $warrior = Character::where('class', 'Warrior')->first();
+        $mage = Character::where('class', 'Mage')->first();
+        $archer = Character::where('class', 'Archer')->first();
+        $slash = Skill::where('skill_name', 'Slash')->first();
+        $fireball = Skill::where('skill_name', 'Fireball')->first();
+        $powerShot = Skill::where('skill_name', 'Power shot')->first();
+
+         DB::table('character_has_skill')->insert([
+            ['character_id' => $warrior->id, 'skill_id' => $slash->id],
+            ['character_id' => $mage->id, 'skill_id' => $fireball->id],
+            ['character_id' => $archer->id, 'skill_id' => $powerShot->id],
         ]);
     }
 }

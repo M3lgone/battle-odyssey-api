@@ -22,3 +22,18 @@ it('player can list all characters', function () {
     $response->assertStatus(200)
              ->assertJsonStructure([['id', 'class', 'attack', 'defense', 'max_health_points', 'max_magic_points']]);
 });
+
+it('returns correct number of characters', function () {
+    $user = User::factory()->create();
+
+    Passport::actingAs($user);
+
+    Artisan::call('db:seed', ['--class' => 'CharacterSeeder']);
+
+    $this->assertDatabaseCount('characters', 3);
+
+    $response = $this->getJson('/api/v1/characters');
+
+    $response->assertStatus(200)
+             ->assertJsonCount(3);
+});

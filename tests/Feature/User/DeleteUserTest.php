@@ -21,3 +21,13 @@ it('can delete own profile', function () {
         'id' => $user->id,
     ]);
 });
+
+it('user is removed from database after deletion', function () {
+    $user = User::factory()->create();
+
+    Passport::actingAs($user);
+
+    $this->deleteJson('/api/v1/users/' . $user->id);
+
+    $this->assertDatabaseMissing('users', ['id' => $user->id]);
+});

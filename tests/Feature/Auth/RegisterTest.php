@@ -14,6 +14,7 @@ it('registers a user', function () {
     $response = $this->postJson('/api/v1/auth/register', $data);
 
     $response->assertCreated();
+             ->->assertJsonStructure(['id', 'name', 'email', 'role']);
 
     $this->assertDatabaseHas('users', [
         'email' => 'isma@gmail.com',

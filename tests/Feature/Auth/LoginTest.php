@@ -23,6 +23,11 @@ it('user login and return bearer token', function () {
 
     $response->assertStatus(200);
     $response->assertJsonStructure(['token']);
+
+    $this->assertDatabaseHas('oauth_access_tokens', [
+        'user_id' => $user->id,
+        'revoked' => false,
+    ]);
 });
 
 it('fails to login with incorrect password', function () {

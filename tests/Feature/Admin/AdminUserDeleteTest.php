@@ -21,3 +21,13 @@ it('admin can delete any user', function () {
 
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
 });
+
+it('admin cannot delete themselves', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    Passport::actingAs($admin);
+
+    $response = $this->deleteJson('/api/v1/admin/users/' . $admin->id);
+
+    $response->assertStatus(403);
+});

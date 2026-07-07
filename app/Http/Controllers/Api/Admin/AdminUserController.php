@@ -37,8 +37,12 @@ class AdminUserController extends Controller
         return response()->json($user, 200);
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        if ($request->user()->id === $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+        
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully'], 200);

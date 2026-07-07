@@ -26,6 +26,7 @@ class AdminUserController extends Controller
             'name' => 'sometimes|string|max:60',
             'email' => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'sometimes|string|min:8|confirmed',
+            'role' => 'sometimes|in:player,admin',
         ]);
 
         if (isset($validated['password'])) {
@@ -37,8 +38,12 @@ class AdminUserController extends Controller
         return response()->json($user, 200);
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        if ($request->user()->id === $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+        
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully'], 200);

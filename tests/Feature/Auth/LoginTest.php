@@ -22,7 +22,15 @@ it('user login and return bearer token', function () {
     $response = $this->postJson('/api/v1/auth/login', $data);
 
     $response->assertStatus(200);
-    $response->assertJsonStructure(['token']);
+    $response->assertJsonStructure([
+                'token',
+                'user' => ['id', 'name', 'email']
+             ]);
+
+    $this->assertDatabaseHas('oauth_access_tokens', [
+        'user_id' => $user->id,
+        'revoked' => false,
+    ]);
 });
 
 it('fails to login with incorrect password', function () {
@@ -48,4 +56,17 @@ it('fails validation if email or password are missing', function () {
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['email', 'password']);
+});
+
+it('fails to login with no exist email', function () {
+    
+    $data = [
+        'email' => 'nobody@gmail.com',
+        'password' => 'password4' 
+    ];
+
+    $response = $this->postJson('/api/v1/auth/login', $data);
+
+    $response->assertStatus(401)
+             ->assertJson(['message' => 'Invalid credentials']);
 });

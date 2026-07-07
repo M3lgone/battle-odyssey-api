@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('characters', function (Blueprint $table) {
             $table->id();
-            $table->enum('class', ['warrior', 'mage', 'archer']);
+            $table->enum('class', ['Warrior', 'Mage', 'Archer']);
             $table->integer('attack');
             $table->integer('defense');
             $table->integer('max_health_points');

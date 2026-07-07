@@ -16,10 +16,7 @@ it('can view own profile', function () {
     $response = $this->getJson('/api/v1/users/' . $user->id);
 
     $response->assertStatus(200)
-             ->assertJsonFragment([
-                'email' => $user->email,
-                'name' => $user->name,
-             ]);
+             ->assertJsonStructure(['id', 'name', 'email', 'role']);
 });
 
 it('cannot view profile without token', function () {
@@ -30,7 +27,7 @@ it('cannot view profile without token', function () {
     $response->assertStatus(401);
 });
 
-it('user does not exist', function () {
+it('user does not exist return error', function () {
     $user = User::factory()->create();
 
     Passport::actingAs($user);

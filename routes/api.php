@@ -16,7 +16,10 @@ use App\Http\Controllers\Api\CharacterController;
         Route::get('/users/{user}', [UserController::class, 'show']);
         Route::patch('/users/{user}', [UserController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
-        Route::post('/auth/logout', LogoutController::class);    
+        Route::post('/auth/logout', LogoutController::class);  
+        
+        Route::get('/characters', [CharacterController::class, 'index']);
+        Route::get('/characters/{character}', [CharacterController::class, 'show']);  
     });
 
     Route::middleware(['auth:api', 'role:admin'])->prefix('admin')->group(function () {
@@ -26,5 +29,5 @@ use App\Http\Controllers\Api\CharacterController;
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
     });
 
-    Route::get('/characters', [CharacterController::class, 'index']);
+    
 });

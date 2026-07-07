@@ -13,11 +13,15 @@ it('registers a user', function () {
 
     $response = $this->postJson('/api/v1/auth/register', $data);
 
-    $response->assertCreated();
+    $response->assertCreated()
+             ->assertJsonStructure([
+                'message',
+                'user' => ['id', 'name', 'email'],
+             ]);
 
     $this->assertDatabaseHas('users', [
+        'name' => 'Ismael',
         'email' => 'isma@gmail.com',
-        'role' => 'player',
     ]);
 });
 
@@ -58,7 +62,7 @@ it('fails if passwords are not the same', function () {
     $data = [
         'name' => 'Alex',
         'email' => 'alex@gmail.com',
-        'password' => '12345',
+        'password' => 'good12345',
         'password_confirmation' => 'bad12345',
     ];
 

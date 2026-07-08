@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\CharacterController;
         Route::post('/auth/logout', LogoutController::class);  
         
         Route::get('/characters', [CharacterController::class, 'index']);
-        Route::get('/characters/{character}', [CharacterController::class, 'show']);  
+        Route::get('/characters/{character}', [CharacterController::class, 'show']);
     });
 
     Route::middleware(['auth:api', 'role:admin'])->prefix('admin')->group(function () {
@@ -29,5 +29,7 @@ use App\Http\Controllers\Api\CharacterController;
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
     });
 
-    
+    Route::middleware(['auth:api', 'role:admin'])->group(function () {
+        Route::post('/characters', [CharacterController::class, 'store']);
+    });
 });

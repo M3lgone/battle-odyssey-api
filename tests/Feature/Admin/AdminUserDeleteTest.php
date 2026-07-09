@@ -14,7 +14,7 @@ it('admin can delete any user', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->deleteJson('/api/v1/admin/users/' . $user->id);
+    $response = $this->deleteJson('/api/v1/users/' . $user->id);
 
     $response->assertStatus(200)
              ->assertJson(['message' => 'User deleted successfully']);
@@ -27,7 +27,7 @@ it('admin cannot delete themselves', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->deleteJson('/api/v1/admin/users/' . $admin->id);
+    $response = $this->deleteJson('/api/v1/users/' . $admin->id);
 
     $response->assertStatus(403);
 });

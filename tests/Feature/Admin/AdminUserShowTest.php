@@ -14,7 +14,7 @@ it('admin can view user details', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->getJson('/api/v1/admin/users/' . $user->id);
+    $response = $this->getJson('/api/v1/users/' . $user->id);
 
     $response->assertStatus(200)
              ->assertJsonFragment([
@@ -29,7 +29,7 @@ it('admin cannot see user password', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->getJson('/api/v1/admin/users/' . $user->id);
+    $response = $this->getJson('/api/v1/users/' . $user->id);
 
     $response->assertStatus(200)
              ->assertJsonMissing(['password']);

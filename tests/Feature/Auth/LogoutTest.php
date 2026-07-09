@@ -18,7 +18,7 @@ it('logout user and revoke token', function () {
 
     $response = $this->withHeaders([
         'Authorization' => 'Bearer ' . $token,
-    ])->postJson('/api/v1/auth/logout');
+    ])->postJson('/api/v1/logout');
 
     $response->assertStatus(200)
              ->assertJson(['message' => 'Logged out successfully']);
@@ -27,6 +27,6 @@ it('logout user and revoke token', function () {
 });
 
 it('cannot logout without token', function () {
-    $response = $this->postJson('/api/v1/auth/logout');
+    $response = $this->postJson('/api/v1/logout');
     $response->assertStatus(401);
 });

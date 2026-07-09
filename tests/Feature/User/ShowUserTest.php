@@ -13,7 +13,7 @@ it('can view own profile', function () {
 
     Passport::actingAs($user);
 
-    $response = $this->getJson('/api/v1/users/' . $user->id);
+    $response = $this->getJson('/api/v1/me');
 
     $response->assertStatus(200)
              ->assertJsonStructure(['id', 'name', 'email', 'role']);
@@ -22,7 +22,7 @@ it('can view own profile', function () {
 it('cannot view profile without token', function () {
     $user = User::factory()->create();
 
-    $response = $this->getJson('/api/v1/users/' . $user->id);
+    $response = $this->getJson('/api/v1/me');
 
     $response->assertStatus(401);
 });

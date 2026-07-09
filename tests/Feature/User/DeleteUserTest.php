@@ -13,7 +13,7 @@ it('can delete own profile', function () {
 
     Passport::actingAs($user);
 
-    $response = $this->deleteJson('/api/v1/users/' . $user->id);
+    $response = $this->deleteJson('/api/v1/me');
 
     $response->assertStatus(200);
 

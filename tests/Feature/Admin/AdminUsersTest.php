@@ -14,7 +14,7 @@ it('admin can list all users', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->getJson('/api/v1/admin/users');
+    $response = $this->getJson('/api/v1/users');
 
     $response->assertOk()
              ->assertJsonStructure([['id', 'name', 'email', 'role']]);
@@ -25,7 +25,7 @@ it('player cannot list users', function () {
 
     Passport::actingAs($player);
 
-    $response = $this->getJson('/api/v1/admin/users');
+    $response = $this->getJson('/api/v1/users');
 
     $response->assertStatus(403);
 });
@@ -35,7 +35,7 @@ it('returns empty list when no users exist', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->getJson('/api/v1/admin/users');
+    $response = $this->getJson('/api/v1/users');
 
     $response->assertStatus(200)
              ->assertJson([]);

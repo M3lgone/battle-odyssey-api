@@ -23,8 +23,9 @@ class UserController extends Controller
     * @response 404 {"message": "User not found"}
     */
 
-    public function show(Request $request, User $user)
+    public function show(Request $request)
     {
+        $user = auth()->user();
         return response()->json($user, 200);
     }
 
@@ -47,11 +48,9 @@ class UserController extends Controller
     * @response 422 {"message": "The email has already been taken."}
     */
 
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        if ($request->user()->id !== $user->id) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
+        $user = $request->user();
 
         $validated = $request->validate([
             'name' => 'sometimes|string|max:60',
@@ -80,11 +79,9 @@ class UserController extends Controller
     * @response 200 {"message": "User deleted successfully"}
     */
 
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request)
     {
-        if ($request->user()->id !== $user->id) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
+        $user = $request->user();
 
         $user->delete();
 

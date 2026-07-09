@@ -11,7 +11,7 @@ it('registers a user', function () {
         'password_confirmation' => 'password4',
     ];
 
-    $response = $this->postJson('/api/v1/auth/register', $data);
+    $response = $this->postJson('/api/v1/register', $data);
 
     $response->assertCreated()
              ->assertJsonStructure([
@@ -38,7 +38,7 @@ it('fails validation if email is already taken', function () {
         'password_confirmation' => 'password123',
     ];
 
-    $response = $this->postJson('/api/v1/auth/register', $data);
+    $response = $this->postJson('/api/v1/register', $data);
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['email']);
@@ -52,7 +52,7 @@ it('fails validation if password is too short', function () {
         'password_confirmation' => '12345', 
     ];
 
-    $response = $this->postJson('/api/v1/auth/register', $data);
+    $response = $this->postJson('/api/v1/register', $data);
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['password']);
@@ -66,7 +66,7 @@ it('fails if passwords are not the same', function () {
         'password_confirmation' => 'bad12345',
     ];
 
-    $response = $this->postJson('/api/v1/auth/register', $data);
+    $response = $this->postJson('/api/v1/register', $data);
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['password']);

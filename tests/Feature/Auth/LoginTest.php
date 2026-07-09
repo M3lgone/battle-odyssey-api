@@ -19,7 +19,7 @@ it('user login and return bearer token', function () {
         'password' => 'password4'
     ];
 
-    $response = $this->postJson('/api/v1/auth/login', $data);
+    $response = $this->postJson('/api/v1/login', $data);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -44,7 +44,7 @@ it('fails to login with incorrect password', function () {
         'password' => 'false_password' 
     ];
 
-    $response = $this->postJson('/api/v1/auth/login', $data);
+    $response = $this->postJson('/api/v1/login', $data);
 
     $response->assertStatus(401)
              ->assertJson(['message' => 'Invalid credentials']);
@@ -52,7 +52,7 @@ it('fails to login with incorrect password', function () {
 
 it('fails validation if email or password are missing', function () {
 
-    $response = $this->postJson('/api/v1/auth/login', []);
+    $response = $this->postJson('/api/v1/login', []);
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['email', 'password']);
@@ -65,7 +65,7 @@ it('fails to login with no exist email', function () {
         'password' => 'password4' 
     ];
 
-    $response = $this->postJson('/api/v1/auth/login', $data);
+    $response = $this->postJson('/api/v1/login', $data);
 
     $response->assertStatus(401)
              ->assertJson(['message' => 'Invalid credentials']);

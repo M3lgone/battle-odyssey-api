@@ -13,7 +13,7 @@ it('can update own profile user', function () {
 
     Passport::actingAs($user);
 
-    $response = $this->patchJson('/api/v1/users/' . $user->id, [
+    $response = $this->putJson('/api/v1/users/' . $user->id, [
         'name' => 'Updated name',
     ]);
 
@@ -32,7 +32,7 @@ it('fails if email is already taken', function () {
 
     Passport::actingAs($userA);
 
-    $response = $this->patchJson('/api/v1/users/' . $userA->id, [
+    $response = $this->putJson('/api/v1/users/' . $userA->id, [
         'email' => 'alex@gmail.com',
     ]);
 
@@ -45,7 +45,7 @@ it('fails if passwords do not match', function () {
 
     Passport::actingAs($user);
 
-    $response = $this->patchJson('/api/v1/users/' . $user->id, [
+    $response = $this->putJson('/api/v1/users/' . $user->id, [
         'password' => 'password123',
         'password_confirmation' => 'bad12345',
     ]);

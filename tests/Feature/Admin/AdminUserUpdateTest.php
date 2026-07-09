@@ -15,7 +15,7 @@ it('admin can update any user', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->patchJson('/api/v1/admin/users/' . $user->id, [
+    $response = $this->putJson('/api/v1/admin/users/' . $user->id, [
         'name' => 'Updated name',
     ]);
 
@@ -34,7 +34,7 @@ it('admin can update user password', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->patchJson('/api/v1/admin/users/' . $user->id, [
+    $response = $this->putJson('/api/v1/admin/users/' . $user->id, [
         'password' => 'newpassword123',
         'password_confirmation' => 'newpassword123',
     ]);
@@ -52,7 +52,7 @@ it('admin can update user role', function () {
 
     Passport::actingAs($admin);
 
-    $response = $this->patchJson('/api/v1/admin/users/' . $user->id, [
+    $response = $this->putJson('/api/v1/admin/users/' . $user->id, [
         'role' => 'admin',
     ]);
 

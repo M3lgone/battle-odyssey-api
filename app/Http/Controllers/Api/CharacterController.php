@@ -34,4 +34,19 @@ class CharacterController extends Controller
 
         return response()->json($character, 201);
     }
+
+    public function update(Request $request, Character $character)
+    {
+        $validated = $request->validate([
+            'class' => 'sometimes|in:Warrior,Mage,Archer',
+            'attack' => 'sometimes|integer|min:0',
+            'defense' => 'sometimes|integer|min:0',
+            'max_health_points' => 'sometimes|integer|min:1',
+            'max_magic_points' => 'sometimes|integer|min:0',
+        ]);
+
+        $character->update($validated);
+
+        return response()->json($character, 200);
+    }
 }

@@ -29,5 +29,6 @@ use App\Http\Controllers\Api\CharacterController;
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
 
         Route::post('/characters', [CharacterController::class, 'store']);
+        Route::put('/characters/{character}', [CharacterController::class, 'update']);
     });
 });

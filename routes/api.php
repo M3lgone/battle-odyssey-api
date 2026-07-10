@@ -30,5 +30,6 @@ use App\Http\Controllers\Api\CharacterController;
 
         Route::post('/characters', [CharacterController::class, 'store']);
         Route::put('/characters/{character}', [CharacterController::class, 'update']);
+        Route::delete('/characters/{character}', [CharacterController::class, 'destroy']);
     });
 });

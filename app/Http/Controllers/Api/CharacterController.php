@@ -49,4 +49,11 @@ class CharacterController extends Controller
 
         return response()->json($character, 200);
     }
+
+    public function destroy(Character $character)
+    {
+        $character->delete();
+
+        return response()->json(['message' => 'Character deleted successfully'], 200);
+    }
 }

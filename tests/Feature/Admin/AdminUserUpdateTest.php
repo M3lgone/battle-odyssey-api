@@ -10,7 +10,9 @@ beforeEach(function () {
 });
 
 it('admin can update any user', function () {
+
     $admin = User::factory()->create(['role' => 'admin']);
+
     $user = User::factory()->create();
 
     Passport::actingAs($admin);
@@ -29,7 +31,9 @@ it('admin can update any user', function () {
 });
 
 it('admin can update user password', function () {
+
     $admin = User::factory()->create(['role' => 'admin']);
+
     $user = User::factory()->create();
 
     Passport::actingAs($admin);
@@ -47,7 +51,9 @@ it('admin can update user password', function () {
 });
 
 it('admin can update user role', function () {
+
     $admin = User::factory()->create(['role' => 'admin']);
+
     $user = User::factory()->create(['role' => 'player']);
 
     Passport::actingAs($admin);
@@ -63,6 +69,19 @@ it('admin can update user role', function () {
         'id' => $user->id,
         'role' => 'admin',
     ]);
+});
+
+it('returns 404 if admin tries to update a non-existent user', function () {
+
+    $admin = User::factory()->create(['role' => 'admin']);
+    
+    Passport::actingAs($admin);
+
+    $response = $this->putJson('/api/v1/users/99999', [
+        'name' => 'Ghost User',
+    ]);
+
+    $response->assertStatus(404);
 });
 
 

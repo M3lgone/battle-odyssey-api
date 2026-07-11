@@ -9,7 +9,9 @@ beforeEach(function () {
 });
 
 it('admin can delete any user', function () {
+
     $admin = User::factory()->create(['role' => 'admin']);
+
     $user = User::factory()->create();
 
     Passport::actingAs($admin);
@@ -23,6 +25,7 @@ it('admin can delete any user', function () {
 });
 
 it('admin cannot delete themselves', function () {
+
     $admin = User::factory()->create(['role' => 'admin']);
 
     Passport::actingAs($admin);
@@ -30,4 +33,21 @@ it('admin cannot delete themselves', function () {
     $response = $this->deleteJson('/api/v1/users/' . $admin->id);
 
     $response->assertStatus(403);
+
+    $this->assertDatabaseHas('users', ['id' => $admin->id]);
+});
+
+it('player cannot delete a user', function () {
+    
+    $player = User::factory()->create(['role' => 'player']);
+
+    $userToDelete = User::factory()->create();
+
+    Passport::actingAs($player);
+
+    $response = $this->deleteJson('/api/v1/users/' . $userToDelete->id);
+
+    $response->assertStatus(403);
+    
+    $this->assertDatabaseHas('users', ['id' => $userToDelete->id]);
 });

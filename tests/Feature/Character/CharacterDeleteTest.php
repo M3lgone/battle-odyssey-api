@@ -12,6 +12,7 @@ beforeEach(function () {
 it('admin can delete an existing character', function () {
 
     $admin = User::factory()->create(['role' => 'admin']);
+
     Passport::actingAs($admin);
 
     $character = Character::factory()->create();
@@ -29,6 +30,7 @@ it('admin can delete an existing character', function () {
 it('player cannot delete a character', function () {
 
     $player = User::factory()->create(['role' => 'player']);
+
     Passport::actingAs($player);
 
     $character = Character::factory()->create();
@@ -53,4 +55,15 @@ it('unauthenticated user cannot delete a character', function () {
     $this->assertDatabaseHas('characters', [
         'id' => $character->id,
     ]);
+});
+
+it('returns 404 if admin tries to delete a non existent character', function () {
+
+    $admin = User::factory()->create(['role' => 'admin']);
+    
+    Passport::actingAs($admin);
+
+    $response = $this->deleteJson('/api/v1/characters/99999');
+
+    $response->assertStatus(404);
 });

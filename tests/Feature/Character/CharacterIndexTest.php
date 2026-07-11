@@ -11,29 +11,41 @@ beforeEach(function () {
 
 it('player can list all characters', function () {
 
-    $user = User::factory()->create();
+    $player = User::factory()->create(['role' => 'player']);
 
-    Passport::actingAs($user);
+    Passport::actingAs($player);
 
-    Artisan::call('db:seed', ['--class' => 'CharacterSeeder']);
+    Character::factory()->count(3)->create();
 
     $response = $this->getJson('/api/v1/characters');
 
     $response->assertStatus(200)
-             ->assertJsonStructure([['id', 'class', 'attack', 'defense', 'max_health_points', 'max_magic_points']]);
+             ->assertJsonCount(3)
+             ->assertJsonStructure([
+                '*' => ['id', 'class', 'attack', 'defense', 'max_health_points', 'max_magic_points']]);
 });
 
-it('returns correct number of characters', function () {
-    $user = User::factory()->create();
+it('unauthenticated user cannot list characters', function () {
+    Character::factory()->count(3)->create();
 
-    Passport::actingAs($user);
+    $response = $this->getJson('/api/v1/characters');
 
-    Artisan::call('db:seed', ['--class' => 'CharacterSeeder']);
+    $response->assertStatus(401);
+});
 
-    $this->assertDatabaseCount('characters', 3);
+it('admin can list all characters', function () {
+
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    Passport::actingAs($admin);
+    
+    Character::factory()->count(3)->create();
 
     $response = $this->getJson('/api/v1/characters');
 
     $response->assertStatus(200)
-             ->assertJsonCount(3);
+             ->assertJsonCount(3)
+             ->assertJsonStructure([
+                 '*' => ['id', 'class', 'attack', 'defense', 'max_health_points', 'max_magic_points']
+             ]);
 });

@@ -70,3 +70,15 @@ it('fails to login with no exist email', function () {
     $response->assertStatus(401)
              ->assertJson(['message' => 'Invalid credentials']);
 });
+
+it('fails validation if email format is invalid', function () {
+    $data = [
+        'email' => 'this-is-not-email',
+        'password' => 'password4'
+    ];
+
+    $response = $this->postJson('/api/v1/login', $data);
+
+    $response->assertStatus(422)
+             ->assertJsonValidationErrors(['email']);
+});

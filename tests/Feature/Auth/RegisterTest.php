@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('registers a user', function () {
+it('registers a user succesfully and asigns role', function () {
 
     $data = [
         'name' => 'Ismael',
@@ -22,6 +22,7 @@ it('registers a user', function () {
     $this->assertDatabaseHas('users', [
         'name' => 'Ismael',
         'email' => 'isma@gmail.com',
+        'role' => 'player',
     ]);
 });
 
@@ -70,5 +71,13 @@ it('fails if passwords are not the same', function () {
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['password']);
+});
+
+it('fails validation if required fields are missing', function () {
+
+    $response = $this->postJson('/api/v1/register', []);
+
+    $response->assertStatus(422)
+             ->assertJsonValidationErrors(['name', 'email', 'password']);
 });
 

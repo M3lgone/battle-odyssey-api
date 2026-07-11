@@ -10,6 +10,7 @@ beforeEach(function () {
 });
 
 it('logout user and revoke token', function () {
+
     $user = User::factory()->create();
 
     $token = $user->createToken('api-token')->accessToken;
@@ -27,6 +28,8 @@ it('logout user and revoke token', function () {
 });
 
 it('cannot logout without token', function () {
+
     $response = $this->postJson('/api/v1/logout');
+    
     $response->assertStatus(401);
 });

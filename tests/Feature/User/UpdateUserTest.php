@@ -9,6 +9,7 @@ beforeEach(function () {
 });
 
 it('can update own profile user', function () {
+
     $user = User::factory()->create();
 
     Passport::actingAs($user);
@@ -27,7 +28,9 @@ it('can update own profile user', function () {
 });
 
 it('fails if email is already taken', function () {
+
     $userA = User::factory()->create(['email' => 'isma@gmail.com']);
+
     $userB = User::factory()->create(['email' => 'alex@gmail.com']);
 
     Passport::actingAs($userA);
@@ -41,6 +44,7 @@ it('fails if email is already taken', function () {
 });
 
 it('fails if passwords do not match', function () {
+    
     $user = User::factory()->create();
 
     Passport::actingAs($user);
@@ -52,4 +56,13 @@ it('fails if passwords do not match', function () {
 
     $response->assertStatus(422)
              ->assertJsonValidationErrors(['password']);
+});
+
+it('unauthenticated user cannot update profile', function () {
+
+    $response = $this->putJson('/api/v1/me', [
+        'name' => 'Updated name',
+    ]);
+
+    $response->assertStatus(401);
 });

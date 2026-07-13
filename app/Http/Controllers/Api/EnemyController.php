@@ -51,4 +51,11 @@ class EnemyController extends Controller
 
         return response()->json($enemy, 200);
     }
+
+    public function destroy(Enemy $enemy)
+    {
+        $enemy->delete();
+
+        return response()->json(['message' => 'Enemy deleted successfully'], 200);
+    }
 }

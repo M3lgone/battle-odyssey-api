@@ -21,4 +21,19 @@ class EnemyController extends Controller
         
         return response()->json($enemy, 200);
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'enemy_name' => 'required|string|max:255', 
+            'max_health_points' => 'required|integer|min:1',
+            'max_magic_points' => 'required|integer|min:0',
+            'attack' => 'required|integer|min:0',
+            'defense' => 'required|integer|min:0',
+        ]);
+        
+        $enemy = Enemy::create($validated);
+
+        return response()->json($enemy, 201);
+    }
 }

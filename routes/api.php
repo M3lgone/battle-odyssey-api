@@ -35,5 +35,6 @@ use App\Http\Controllers\Api\EnemyController;
 
         Route::get('/enemies', [EnemyController::class, 'index']);
         Route::get('/enemies/{enemy}', [EnemyController::class, 'show']);
+        Route::post('/enemies', [EnemyController::class, 'store']);
     });
 });

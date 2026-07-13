@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,14 +23,20 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        $this->call([
-        AdminSeeder::class,
-        CharacterSeeder::class,
-        SkillSeeder::class,
-        CharacterHasSkillSeeder::class,
-        EnemySeeder::class,
-        EnemyHasSkillSeeder::class,
+        Artisan::call('passport:client', [
+            '--personal' => true,
+            '--name' => 'Battle Odyssey Client',
+            '--provider' => 'users'
+        ]);
 
-    ]);
+        $this->call([
+            AdminSeeder::class,
+            CharacterSeeder::class,
+            SkillSeeder::class,
+            CharacterHasSkillSeeder::class,
+            EnemySeeder::class,
+            EnemyHasSkillSeeder::class,
+
+        ]);
     }
 }

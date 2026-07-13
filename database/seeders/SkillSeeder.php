@@ -36,5 +36,29 @@ class SkillSeeder extends Seeder
             'damage_skill' => 35,
             'skill_cost_magic_points' => 25,
         ]);
+
+        // Goblin skill
+        Skill::create([
+            'skill_name' => 'Hack',
+            'description' => 'Swings a crude weapon with reckless force',
+            'damage_skill' => 15,
+            'skill_cost_magic_points' => 5,
+        ]);
+
+        // Troll skill
+        Skill::create([
+            'skill_name' => 'Smash',
+            'description' => 'Crushes everything with brutal strength',
+            'damage_skill' => 25,
+            'skill_cost_magic_points' => 10,
+        ]);
+
+         //Orc skill
+        Skill::create([
+            'skill_name' => 'Rampage',
+            'description' => 'Unleashes a furious flurry of attacks',
+            'damage_skill' => 35,
+            'skill_cost_magic_points' => 25,
+        ]);
     }
 }

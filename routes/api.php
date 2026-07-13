@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\CharacterController;
+use App\Http\Controllers\Api\EnemyController;
 
     Route::prefix('v1')->group(function () {
         Route::post('/register', RegisterController::class);
@@ -31,5 +32,7 @@ use App\Http\Controllers\Api\CharacterController;
         Route::post('/characters', [CharacterController::class, 'store']);
         Route::put('/characters/{character}', [CharacterController::class, 'update']);
         Route::delete('/characters/{character}', [CharacterController::class, 'destroy']);
+
+        Route::get('/enemies', [EnemyController::class, 'index']);
     });
 });

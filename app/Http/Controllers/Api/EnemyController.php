@@ -14,4 +14,11 @@ class EnemyController extends Controller
 
         return response()->json($enemies, 200);
     }
+
+    public function show(Enemy $enemy)
+    {
+        $enemy->load('skills');
+        
+        return response()->json($enemy, 200);
+    }
 }

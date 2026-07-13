@@ -34,5 +34,6 @@ use App\Http\Controllers\Api\EnemyController;
         Route::delete('/characters/{character}', [CharacterController::class, 'destroy']);
 
         Route::get('/enemies', [EnemyController::class, 'index']);
+        Route::get('/enemies/{enemy}', [EnemyController::class, 'show']);
     });
 });

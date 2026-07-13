@@ -15,7 +15,7 @@ it('admin can create a new enemy', function () {
 
     Passport::actingAs($admin);
 
-    $payload = [
+    $data = [
         'enemy_name' => 'Hydra',
         'max_health_points' => 150,
         'max_magic_points' => 100,
@@ -23,7 +23,7 @@ it('admin can create a new enemy', function () {
         'defense' => 30,
     ];
 
-    $response = $this->postJson('/api/v1/enemies', $payload);
+    $response = $this->postJson('/api/v1/enemies', $data);
 
     $response->assertStatus(201)
              ->assertJsonFragment(['enemy_name' => 'Hydra']);
@@ -40,7 +40,7 @@ it('player cannot create a new enemy', function () {
 
     Passport::actingAs($player);
 
-    $payload = [
+    $data = [
         'enemy_name' => 'Goblin',
         'max_health_points' => 100,
         'max_magic_points' => 0,
@@ -48,7 +48,7 @@ it('player cannot create a new enemy', function () {
         'defense' => 5,
     ];
 
-    $response = $this->postJson('/api/v1/enemies', $payload);
+    $response = $this->postJson('/api/v1/enemies', $data);
 
     $response->assertStatus(403);
     $this->assertDatabaseMissing('enemies', ['enemy_name' => 'Goblin']);
@@ -56,7 +56,7 @@ it('player cannot create a new enemy', function () {
 
 it('fails to create an enemy if user is unauthenticated', function () {
 
-    $payload = [
+    $data = [
         'enemy_name' => 'Ghost',
         'max_health_points' => 50,
         'max_magic_points' => 20,
@@ -64,7 +64,7 @@ it('fails to create an enemy if user is unauthenticated', function () {
         'defense' => 10,
     ];
 
-    $response = $this->postJson('/api/v1/enemies', $payload);
+    $response = $this->postJson('/api/v1/enemies', $data);
 
     $response->assertStatus(401);
 });

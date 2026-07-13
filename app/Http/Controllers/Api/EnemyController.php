@@ -36,4 +36,19 @@ class EnemyController extends Controller
 
         return response()->json($enemy, 201);
     }
+
+    public function update(Request $request, Enemy $enemy)
+    {
+        $validated = $request->validate([
+            'enemy_name' => 'sometimes|string|max:255',
+            'max_health_points' => 'sometimes|integer|min:1',
+            'max_magic_points' => 'sometimes|integer|min:0',
+            'attack' => 'sometimes|integer|min:0',
+            'defense' => 'sometimes|integer|min:0',
+        ]);
+
+        $enemy->update($validated);
+
+        return response()->json($enemy, 200);
+    }
 }

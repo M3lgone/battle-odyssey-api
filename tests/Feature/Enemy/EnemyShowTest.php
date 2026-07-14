@@ -3,12 +3,7 @@
 use App\Models\User;
 use App\Models\Enemy;
 use App\Models\Skill;
-use Illuminate\Support\Facades\Artisan;
 use Laravel\Passport\Passport;
-
-beforeEach(function () {
-    Artisan::call('passport:client', ['--personal' => true, '--no-interaction' => true]);
-});
 
 it('admin can view enemy details', function () {
 

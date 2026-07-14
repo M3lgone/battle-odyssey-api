@@ -1,12 +1,7 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Artisan;
 use Laravel\Passport\Passport;
-
-beforeEach(function () {
-    Artisan::call('passport:client', ['--personal' => true, '--no-interaction' => true]);
-});
 
 it('can view own profile', function () {
 

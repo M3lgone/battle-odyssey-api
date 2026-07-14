@@ -2,12 +2,7 @@
 
 use App\Models\User;
 use App\Models\Enemy;
-use Illuminate\Support\Facades\Artisan;
 use Laravel\Passport\Passport;
-
-beforeEach(function () {
-    Artisan::call('passport:client', ['--personal' => true, '--no-interaction' => true]);
-});
 
 it('admin can delete an existing enemy', function () {
 

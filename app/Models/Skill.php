@@ -20,4 +20,9 @@ class Skill extends Model
     {
         return $this->belongsToMany(Character::class, 'character_has_skill');
     }
+
+    public function enemies()
+    {
+        return $this->belongsToMany(Enemy::class, 'enemy_has_skill');
+    }
 }

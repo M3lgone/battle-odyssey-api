@@ -41,5 +41,6 @@ use App\Http\Controllers\Api\SkillController;
         Route::delete('/enemies/{enemy}', [EnemyController::class, 'destroy']);
 
         Route::get('/skills', [SkillController::class, 'index']);
+        Route::post('/skills', [SkillController::class, 'store']);
     });
 });

@@ -42,5 +42,6 @@ use App\Http\Controllers\Api\SkillController;
 
         Route::get('/skills', [SkillController::class, 'index']);
         Route::post('/skills', [SkillController::class, 'store']);
+        Route::put('/skills/{skill}', [SkillController::class, 'update']);
     });
 });

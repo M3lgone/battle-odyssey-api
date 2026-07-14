@@ -28,4 +28,18 @@ class SkillController extends Controller
 
         return response()->json($skill, 201);
     }
+
+    public function update(Request $request, Skill $skill)
+    {
+        $validated = $request->validate([
+            'skill_name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'damage_skill' => 'sometimes|integer|min:0',
+            'skill_cost_magic_points' => 'sometimes|integer|min:0',
+        ]);
+
+        $skill->update($validated);
+
+        return response()->json($skill, 200);
+    }
 }

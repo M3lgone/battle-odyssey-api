@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\CharacterController;
 use App\Http\Controllers\Api\EnemyController;
+use App\Http\Controllers\Api\SkillController;
 
     Route::prefix('v1')->group(function () {
         Route::post('/register', RegisterController::class);
@@ -38,5 +39,7 @@ use App\Http\Controllers\Api\EnemyController;
         Route::post('/enemies', [EnemyController::class, 'store']);
         Route::put('/enemies/{enemy}', [EnemyController::class, 'update']);
         Route::delete('/enemies/{enemy}', [EnemyController::class, 'destroy']);
+
+        Route::get('/skills', [SkillController::class, 'index']);
     });
 });

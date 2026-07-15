@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             CharacterHasSkillSeeder::class,
             EnemySeeder::class,
             EnemyHasSkillSeeder::class,
+            GameSeeder::class,
 
         ]);
     }

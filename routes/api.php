@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\GameController;
         Route::get('/characters/{character}', [CharacterController::class, 'show']);
 
         Route::post('/games', [GameController::class, 'store']);
+        Route::get('/games', [GameController::class, 'index']);
     });
 
     Route::middleware(['auth:api', 'role:admin'])->group(function () {

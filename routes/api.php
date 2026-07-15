@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\CharacterController;
 use App\Http\Controllers\Api\EnemyController;
 use App\Http\Controllers\Api\SkillController;
+use App\Http\Controllers\Api\GameController;
 
     Route::prefix('v1')->group(function () {
         Route::post('/register', RegisterController::class);
@@ -22,6 +23,8 @@ use App\Http\Controllers\Api\SkillController;
         
         Route::get('/characters', [CharacterController::class, 'index']);
         Route::get('/characters/{character}', [CharacterController::class, 'show']);
+
+        Route::post('/games', [GameController::class, 'store']);
     });
 
     Route::middleware(['auth:api', 'role:admin'])->group(function () {

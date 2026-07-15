@@ -8,6 +8,21 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
+    public function index(Request $request)
+    {
+        $game = Game::where('user_id', $request->user()->id)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$game) {
+            return response()->json([
+                'message' => 'No active game found.'
+            ], 404);
+        }
+
+        return response()->json($game);
+    }
+    
     public function store(Request $request)
     {
         $activeGameExists = Game::where('user_id', auth()->id())

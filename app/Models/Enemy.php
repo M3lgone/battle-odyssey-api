@@ -16,6 +16,8 @@ class Enemy extends Model
         'max_magic_points',
         'attack',
         'defense',
+        'enemy_image_url',
+        'background_image_url'
     ];
 
     public function skills()

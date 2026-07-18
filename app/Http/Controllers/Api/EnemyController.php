@@ -30,6 +30,8 @@ class EnemyController extends Controller
             'max_magic_points' => 'required|integer|min:0',
             'attack' => 'required|integer|min:0',
             'defense' => 'required|integer|min:0',
+            'enemy_image_url' => 'required|string',
+            'background_image_url' => 'required|string'
         ]);
         
         $enemy = Enemy::create($validated);

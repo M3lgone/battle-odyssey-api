@@ -16,6 +16,7 @@ it('admin can create a new character', function () {
         'defense' => 15,
         'max_health_points' => 150,
         'max_magic_points' => 200,
+        'character_image_url' => 'mage.png'
     ];
 
     $response = $this->postJson('/api/v1/characters', $characterData);
@@ -53,6 +54,7 @@ it('player cannot create a character', function () {
         'defense' => 20,
         'max_health_points' => 200,
         'max_magic_points' => 50,
+        'character_image_url' => 'warrior.png'
     ]);
 
     $response->assertStatus(403);
@@ -66,6 +68,7 @@ it('unauthenticated user cannot create a character', function () {
         'defense' => 20,
         'max_health_points' => 200,
         'max_magic_points' => 50,
+        'character_image_url' => 'warrior.png'
     ]);
 
     $response->assertStatus(401);
@@ -85,6 +88,7 @@ it('fails to create character if required fields are missing', function () {
                  'attack', 
                  'defense', 
                  'max_health_points', 
-                 'max_magic_points'
+                 'max_magic_points',
+                 'character_image_url'
              ]);
 });

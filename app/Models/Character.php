@@ -15,6 +15,7 @@ class Character extends Model
         'defense',
         'max_health_points',
         'max_magic_points',
+        'character_image_url'
     ];
 
     public function skills()

@@ -25,6 +25,7 @@ class CharacterFactory extends Factory
             'defense' => fake()->numberBetween(10, 30),
             'max_health_points' => fake()->numberBetween(100, 200),
             'max_magic_points' => fake()->numberBetween(100, 200),
+            'character_image_url' => fake()->imageUrl(),
         ];
     }
 }

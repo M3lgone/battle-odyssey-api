@@ -23,6 +23,8 @@ class EnemyFactory extends Factory
             'max_magic_points' => fake()->numberBetween(10, 100),
             'attack' => fake()->numberBetween(10, 40),
             'defense' => fake()->numberBetween(5, 30),
+            'enemy_image_url' => fake()->imageUrl(),
+            'background_image_url' => fake()->imageUrl(),
         ];
     }
 }

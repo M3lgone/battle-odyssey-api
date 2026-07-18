@@ -28,6 +28,7 @@ class CharacterController extends Controller
             'defense' => 'required|integer|min:0',
             'max_health_points' => 'required|integer|min:1',
             'max_magic_points' => 'required|integer|min:0',
+            'character_image_url' => 'required|string'
         ]);
         
         $character = Character::create($validated);

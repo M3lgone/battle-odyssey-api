@@ -16,6 +16,8 @@ it('admin can create a new enemy', function () {
         'max_magic_points' => 100,
         'attack' => 40,
         'defense' => 30,
+        'enemy_image_url' => 'hydra.png',
+        'background_image_url' => 'bg_hydra.png'
     ];
 
     $response = $this->postJson('/api/v1/enemies', $data);
@@ -41,6 +43,8 @@ it('player cannot create a new enemy', function () {
         'max_magic_points' => 0,
         'attack' => 15,
         'defense' => 5,
+        'enemy_image_url' => 'goblin.png',
+        'background_image_url' => 'bg-goblin.png'
     ];
 
     $response = $this->postJson('/api/v1/enemies', $data);
@@ -57,6 +61,8 @@ it('fails to create an enemy if user is unauthenticated', function () {
         'max_magic_points' => 20,
         'attack' => 10,
         'defense' => 10,
+        'enemy_image_url' => 'ghost.png',
+        'background_image_url' => 'bg-ghost.png'
     ];
 
     $response = $this->postJson('/api/v1/enemies', $data);
@@ -78,6 +84,8 @@ it('validates required fields when creating an enemy', function () {
                  'max_health_points', 
                  'max_magic_points', 
                  'attack', 
-                 'defense'
+                 'defense',
+                 'enemy_image_url',
+                 'background_image_url'
              ]);
 });

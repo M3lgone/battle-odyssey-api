@@ -19,6 +19,7 @@ class CharacterSeeder extends Seeder
             'defense' => 20,
             'max_health_points' => 120,
             'max_magic_points' => 100,
+            'character_image_url' => 'images/characters/warrior.png',
         ]);
 
         Character::create([
@@ -27,6 +28,7 @@ class CharacterSeeder extends Seeder
             'defense' => 15,
             'max_health_points' => 100,
             'max_magic_points' => 120,
+            'character_image_url' => 'images/characters/mage.png',
         ]);
 
         Character::create([
@@ -35,6 +37,7 @@ class CharacterSeeder extends Seeder
             'defense' => 15,
             'max_health_points' => 100,
             'max_magic_points' => 100,
+            'character_image_url' => 'images/characters/archer.png',
         ]);
     }
 }

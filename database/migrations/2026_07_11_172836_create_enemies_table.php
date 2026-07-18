@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('max_magic_points');
             $table->integer('attack');
             $table->integer('defense');
+            $table->string('enemy_image_url', 100);
+            $table->string('background_image_url', 100);
             $table->timestamps();
         });
     }

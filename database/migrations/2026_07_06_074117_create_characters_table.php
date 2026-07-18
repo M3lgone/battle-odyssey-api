@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('defense');
             $table->integer('max_health_points');
             $table->integer('max_magic_points');
+            $table->string('character_image_url', 45);
             $table->timestamps();
         });
     }

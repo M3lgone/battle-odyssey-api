@@ -19,6 +19,8 @@ class EnemySeeder extends Seeder
             'max_magic_points' => 30,
             'attack' => 10,
             'defense' => 5,
+            'enemy_image_url' => 'images/enemies/goblin.png',
+            'background_image_url' => 'images/backgrounds/bg-goblin.png',
         ]);
 
         Enemy::create([
@@ -27,6 +29,8 @@ class EnemySeeder extends Seeder
             'max_magic_points' => 50,
             'attack' => 18,
             'defense' => 12,
+            'enemy_image_url' => 'images/enemies/troll.png',
+            'background_image_url' => 'images/backgrounds/bg-troll.png',
         ]);
 
         Enemy::create([
@@ -35,6 +39,8 @@ class EnemySeeder extends Seeder
             'max_magic_points' => 80,
             'attack' => 22,
             'defense' => 15,
+            'enemy_image_url' => 'images/enemies/orc.png',
+            'background_image_url' => 'images/backgrounds/bg-orc.png',
         ]);
     }
 }

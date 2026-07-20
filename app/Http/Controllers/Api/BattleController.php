@@ -7,16 +7,30 @@ use Illuminate\Http\Request;
 use App\Models\Battle;
 use App\Models\Character;
 use App\Models\Enemy;
+use App\Models\Game;
 
 class BattleController extends Controller
 {
     public function store(Request $request)
     {
-
         $request->validate([
             'game_id' => 'required|exists:games,id',
             'character_id' => 'required|exists:characters,id',
         ]);
+
+        $game = Game::find($request->game_id);
+        
+        if ($game->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $ongoingBattle = Battle::where('game_id', $game->id)
+                               ->where('result', 'ongoing')
+                               ->exists();
+
+        if ($ongoingBattle) {
+            return response()->json(['error' => 'You already have an ongoing battle.'], 400);
+        }
 
         $battlesFought = Battle::where('game_id', $request->game_id)->count();
 
@@ -51,5 +65,15 @@ class BattleController extends Controller
             'message' => 'Battle started successfully!',
             'battle' => $battle
         ], 201);
+    }
+
+    public function show(Battle $battle)
+    {
+        if ($battle->game->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+        $battle->load(['character', 'enemies']);
+
+        return response()->json($battle, 200);
     }
 }

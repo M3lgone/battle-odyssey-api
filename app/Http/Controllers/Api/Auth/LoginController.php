@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\LoginRequest;
 
 class LoginController extends Controller
 {
@@ -24,12 +25,9 @@ class LoginController extends Controller
     * @response 422 {"message": "The email field is required.", "errors": {"email": ["The email field is required."], "password": ["The password field is required."]}}
     */
     
-    public function __invoke(Request $request)
+    public function __invoke(LoginRequest $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         $user = User::where('email', $validated['email'])->first();
 
@@ -44,6 +42,6 @@ class LoginController extends Controller
         return response()->json([
             'token' => $token,
             'user' => $user,
-            ], 200);
+        ], 200);
     }
 }

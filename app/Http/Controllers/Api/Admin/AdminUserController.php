@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AdminUpdateUserRequest;
 
 class AdminUserController extends Controller
 {
@@ -20,14 +21,9 @@ class AdminUserController extends Controller
         return response()->json($user, 200);
     }
 
-    public function update(Request $request, User $user)
+    public function update(AdminUpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:60',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
-            'password' => 'sometimes|string|min:8|confirmed',
-            'role' => 'sometimes|in:player,admin',
-        ]);
+        $validated = $request->validated();
 
         if (isset($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);

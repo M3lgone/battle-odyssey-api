@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\BattleController;
         Route::post('/battles', [BattleController::class, 'store']);
 
         Route::get('/battles/{battle}', [BattleController::class, 'show']);
+        Route::get('/games/{game}/battles', [BattleController::class, 'index']);
     });
 
     Route::middleware(['auth:api', 'role:admin'])->group(function () {

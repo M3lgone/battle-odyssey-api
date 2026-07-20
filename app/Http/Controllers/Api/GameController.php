@@ -5,14 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Game;
 use Illuminate\Http\Request;
+use App\Services\GameService;
+use InvalidArgumentException;
 
 class GameController extends Controller
 {
+    protected GameService $gameService;
+
+    public function __construct(GameService $gameService)
+    {
+        $this->gameService = $gameService;
+    }
+
     public function index(Request $request)
     {
-        $game = Game::where('user_id', $request->user()->id)
-            ->where('status', 'active')
-            ->first();
+        $game = $this->gameService->getActiveGame($request->user()->id);
 
         if (!$game) {
             return response()->json([
@@ -25,21 +32,15 @@ class GameController extends Controller
     
     public function store(Request $request)
     {
-        $activeGameExists = Game::where('user_id', auth()->id())
-            ->whereIn('status', ['active', 'in_progress'])
-            ->exists();
-
-        if ($activeGameExists) {
+        try {
+            $game = $this->gameService->createGame($request->user()->id);
+            
+            return response()->json($game, 201);
+            
+        } catch (InvalidArgumentException $e) {
             return response()->json([
-                'error' => 'You already have a game in progress, you must finish or delte it to start another one.'
+                'error' => $e->getMessage()
             ], 400);
         }
-
-        $game = Game::create([
-            'user_id' => auth()->id(),
-            'status' => 'active',
-        ]);
-
-        return response()->json($game, 201);
     }
 }

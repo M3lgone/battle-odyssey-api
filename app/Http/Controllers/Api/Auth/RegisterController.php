@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
 
 class RegisterController extends Controller
 {
@@ -25,13 +26,9 @@ class RegisterController extends Controller
     * @response 422 {"message": "The email has already been taken."}
     */
 
-    public function __invoke(Request $request)
+    public function __invoke(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:60',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
             'name' => $validated['name'],

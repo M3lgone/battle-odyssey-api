@@ -46,7 +46,7 @@ it('fails to start a game if the player already has one in progress', function (
 
     $response->assertStatus(400)
              ->assertJson([
-                 'error' => 'You already have a game in progress, you must finish or delte it to start another one.'
+                 'error' => 'You already have a game in progress, you must finish or delete it to start another one.'
              ]);
 });
 

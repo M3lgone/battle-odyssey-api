@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Skill;
+use App\Http\Requests\StoreSkillRequest;
+use App\Http\Requests\UpdateSkillRequest;
 
 class SkillController extends Controller
 {
@@ -15,30 +17,16 @@ class SkillController extends Controller
         return response()->json($skills, 200);
     }
 
-    public function store(Request $request)
+    public function store(StoreSkillRequest $request)
     {
-        $validated = $request->validate([
-            'skill_name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'damage_skill' => 'required|integer|min:0',
-            'skill_cost_magic_points' => 'required|integer|min:0',
-        ]);
-
-        $skill = Skill::create($validated);
+        $skill = Skill::create($request->validated());
 
         return response()->json($skill, 201);
     }
 
-    public function update(Request $request, Skill $skill)
+    public function update(UpdateSkillRequest $request, Skill $skill)
     {
-        $validated = $request->validate([
-            'skill_name' => 'sometimes|string|max:255',
-            'description' => 'sometimes|string',
-            'damage_skill' => 'sometimes|integer|min:0',
-            'skill_cost_magic_points' => 'sometimes|integer|min:0',
-        ]);
-
-        $skill->update($validated);
+        $skill->update($request->validated());
 
         return response()->json($skill, 200);
     }

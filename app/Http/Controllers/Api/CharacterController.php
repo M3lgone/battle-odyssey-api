@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Character;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCharacterRequest;
+use App\Http\Requests\UpdateCharacterRequest;
 
 class CharacterController extends Controller
 {
@@ -20,33 +22,16 @@ class CharacterController extends Controller
         return response()->json($character, 200);
     }
 
-    public function store(Request $request)
+    public function store(StoreCharacterRequest $request)
     {
-        $validated = $request->validate([
-            'class' => 'required|in:Warrior,Mage,Archer',
-            'attack' => 'required|integer|min:0',
-            'defense' => 'required|integer|min:0',
-            'max_health_points' => 'required|integer|min:1',
-            'max_magic_points' => 'required|integer|min:0',
-            'character_image_url' => 'required|string'
-        ]);
-        
-        $character = Character::create($validated);
+       $character = Character::create($request->validated());
 
         return response()->json($character, 201);
     }
 
-    public function update(Request $request, Character $character)
+    public function update(UpdateCharacterRequest $request, Character $character)
     {
-        $validated = $request->validate([
-            'class' => 'sometimes|in:Warrior,Mage,Archer',
-            'attack' => 'sometimes|integer|min:0',
-            'defense' => 'sometimes|integer|min:0',
-            'max_health_points' => 'sometimes|integer|min:1',
-            'max_magic_points' => 'sometimes|integer|min:0',
-        ]);
-
-        $character->update($validated);
+        $character->update($request->validated());
 
         return response()->json($character, 200);
     }

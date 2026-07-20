@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -48,15 +49,11 @@ class UserController extends Controller
     * @response 422 {"message": "The email has already been taken."}
     */
 
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request)
     {
         $user = $request->user();
 
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:60',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
-            'password' => 'sometimes|string|min:8|confirmed',
-        ]);
+        $validated = $request->validated();
 
         if (isset($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);

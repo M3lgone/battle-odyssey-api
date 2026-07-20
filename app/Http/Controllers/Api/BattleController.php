@@ -76,4 +76,23 @@ class BattleController extends Controller
 
         return response()->json($battle, 200);
     }
+
+    public function index(Game $game)
+    {
+
+        if ($game->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized. This game does not belong to you.'], 403);
+        }
+
+        $battles = Battle::where('game_id', $game->id)
+            ->with(['character', 'enemies'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'message' => 'Battle history retrieved successfully.',
+            'game_id' => $game->id,
+            'battles' => $battles
+        ], 200);
+    }
 }

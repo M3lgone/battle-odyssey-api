@@ -11,20 +11,40 @@ use App\Http\Requests\RegisterRequest;
 class RegisterController extends Controller
 {
     /**
-    * @group Auth
-    * 
-    * Register a new user
-    * 
-    * @unauthenticated
-    * 
-    * @bodyParam name string required The user's name. Example: Ismael
-    * @bodyParam email string required The user's email. Example: isma@gmail.com
-    * @bodyParam password string required Minimum 8 characters. Example: password4
-    * @bodyParam password_confirmation string required Must match password. Example: password4
-    * 
-    * @response 201 {"id": 1, "name": "Ismael", "email": "isma@gmail.com", "role": "player"}
-    * @response 422 {"message": "The email has already been taken."}
-    */
+     * Register a new user
+     * 
+     * Creates a new user account in the system. By default, 
+     * all new users are assigned the 'player' role.
+     * 
+     * @group Authentication
+     * @unauthenticated
+     * 
+     * @bodyParam name string required The user's name. Maximum 60 characters. Example: Ismael
+     * @bodyParam email string required A valid and unique email address. Example: isma@gmail.com
+     * @bodyParam password string required The access password. Minimum 8 characters. Example: password123
+     * @bodyParam password_confirmation string required Must match the password exactly. Example: password123
+     * 
+     * @response 201 {
+     *   "message": "User registered successfully",
+     *   "user": {
+     *     "id": 1,
+     *     "name": "Ismael",
+     *     "email": "isma@gmail.com",
+     *     "role": "player",
+     *     "created_at": "2024-05-20T10:00:00.000000Z",
+     *     "updated_at": "2024-05-20T10:00:00.000000Z"
+     *   }
+     * }
+     * 
+     * @response 422 {
+     *   "message": "The email has already been taken.",
+     *   "errors": {
+     *     "email": [
+     *       "The email has already been taken."
+     *     ]
+     *   }
+     * }
+     */
 
     public function __invoke(RegisterRequest $request)
     {

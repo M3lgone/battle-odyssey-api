@@ -31,7 +31,7 @@ it('fails to start a game if user is unauthenticated', function () {
     $response->assertStatus(401);
 });
 
-it('fails to start a game if the player already has one in progress', function () {
+it('fails to start a game if the player already has an active game', function () {
 
     $player = User::factory()->create(['role' => 'player']);
 
@@ -39,14 +39,14 @@ it('fails to start a game if the player already has one in progress', function (
 
     $game = Game::factory()->create([
         'user_id' => $player->id,
-        'status' => 'in_progress',
+        'status' => 'active', 
     ]);
 
     $response = $this->postJson('/api/v1/games');
 
     $response->assertStatus(400)
              ->assertJson([
-                 'error' => 'You already have a game in progress, you must finish or delete it to start another one.'
+                 'error' => 'You already have an active game, you must finish it to start another one.'
              ]);
 });
 

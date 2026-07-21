@@ -20,7 +20,7 @@ class GameFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'status' => 'active',
+            'status' => fake()->randomElement(['active', 'finished']),
         ];
     }
 }

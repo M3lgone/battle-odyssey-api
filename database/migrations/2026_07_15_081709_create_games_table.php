@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id(); 
-            $table->enum('status', ['active', 'in_progress', 'finished'])->default('active');
+            $table->enum('status', ['active', 'finished'])->default('active');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });

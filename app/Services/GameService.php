@@ -17,11 +17,11 @@ class GameService
     public function createGame(int $userId): Game
     {
         $activeGameExists = Game::where('user_id', $userId)
-            ->whereIn('status', ['active', 'in_progress'])
+            ->where('status', 'active')
             ->exists();
 
         if ($activeGameExists) {
-            throw new InvalidArgumentException('You already have a game in progress, you must finish or delete it to start another one.');
+            throw new InvalidArgumentException('You already have an active game, you must finish it to start another one.');
         }
 
         return Game::create([

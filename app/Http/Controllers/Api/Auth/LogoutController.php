@@ -8,15 +8,23 @@ use Illuminate\Http\Request;
 class LogoutController extends Controller
 {
     /**
-    * @group Auth
-    * 
-    * Logout
-    * 
-    * @authenticated
-    * 
-    * @response 200 {"message": "Logged out successfully"}
-    * @response 401 {"message": "Unauthenticated."}
-    */
+     * User logout
+     * 
+     * Revokes the authenticated user's current Passport access token, 
+     * effectively logging them out of the application and preventing 
+     * further use of that specific token.
+     * 
+     * @group Authentication
+     * @authenticated
+     * 
+     * @response 200 {
+     *   "message": "Logged out successfully"
+     * }
+     * 
+     * @response 401 {
+     *   "message": "Unauthenticated."
+     * }
+     */
 
     public function __invoke(Request $request)
     {

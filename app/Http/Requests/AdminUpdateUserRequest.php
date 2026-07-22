@@ -22,11 +22,11 @@ class AdminUpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-            $user = $this->route('user');
+            $userId = $this->route('user')?->id;
 
         return [
             'name' => 'sometimes|string|max:60',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'email' => 'sometimes|email|unique:users,email,' . $userId,
             'password' => 'sometimes|string|min:8|confirmed',
             'role' => 'sometimes|in:player,admin',
         ];

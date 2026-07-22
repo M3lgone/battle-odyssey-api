@@ -11,19 +11,46 @@ use App\Http\Requests\LoginRequest;
 class LoginController extends Controller
 {
     /**
-    * @group Auth
-    * 
-    * Login
-    * 
-    * @unauthenticated
-    * 
-    * @bodyParam email string required The user's email. Example: isma@gmail.com
-    * @bodyParam password string required The user's password. Example: password4
-    * 
-    * @response 200 {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...", "user": {"id": 1, "name": "Ismael", "email": "isma@gmail.com"}}
-    * @response 401 {"message": "Invalid credentials"}
-    * @response 422 {"message": "The email field is required.", "errors": {"email": ["The email field is required."], "password": ["The password field is required."]}}
-    */
+     * User login
+     * 
+     * Authenticates a user using their email and password. Upon successful 
+     * authentication, it returns a Passport access token (Bearer token) 
+     * that must be used in subsequent requests.
+     * 
+     * @group Authentication
+     * @unauthenticated
+     * 
+     * @bodyParam email string required A valid email address registered in the system. Example: isma@gmail.com
+     * @bodyParam password string required The user's password. Example: password4
+     * 
+     * @response 200 {
+     *   "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoi... (Passport token)",
+     *   "user": {
+     *     "id": 1,
+     *     "name": "Ismael",
+     *     "email": "isma@gmail.com",
+     *     "role": "player",
+     *     "created_at": "2024-05-20T10:00:00.000000Z",
+     *     "updated_at": "2024-05-20T10:00:00.000000Z"
+     *   }
+     * }
+     * 
+     * @response 401 {
+     *   "message": "Invalid credentials"
+     * }
+     * 
+     * @response 422 {
+     *   "message": "The email field is required. (and 1 more error)",
+     *   "errors": {
+     *     "email": [
+     *       "The email field is required."
+     *     ],
+     *     "password": [
+     *       "The password field is required."
+     *     ]
+     *   }
+     * }
+     */
     
     public function __invoke(LoginRequest $request)
     {

@@ -64,7 +64,13 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-5. Edit the following in `.env`:
+5. Generate passport key
+
+```bash
+php artisan passport:keys
+```
+
+6. Edit the following in `.env`:
 
 ```
 APP_NAME="Battle Odyssey API"
@@ -81,19 +87,19 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-6. Run migrations and seed database (This also initializes Passport)
+7. Run migrations and seed database (This also initializes Passport)
 
 ```bash
 php artisan migrate --seed
 ```
 
-7. Start the server
+8. Start the server
 
 ```bash
 php artisan serve
 ```
 
-8. Generate API Documentation (Optional)
+9. Generate API Documentation (Optional)
 
 Scribe documentation is already included, but if you need to regenerate it, run:
 

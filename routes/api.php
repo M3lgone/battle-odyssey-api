@@ -25,6 +25,9 @@ use App\Http\Controllers\Api\BattleController;
         Route::get('/characters', [CharacterController::class, 'index']);
         Route::get('/characters/{character}', [CharacterController::class, 'show']);
 
+        Route::get('/skills', [SkillController::class, 'index']);
+        Route::get('/skills/{skill}', [SkillController::class, 'show']);
+
         Route::post('/games', [GameController::class, 'store']);
         Route::get('/games', [GameController::class, 'index']);
 
@@ -50,7 +53,6 @@ use App\Http\Controllers\Api\BattleController;
         Route::put('/enemies/{enemy}', [EnemyController::class, 'update']);
         Route::delete('/enemies/{enemy}', [EnemyController::class, 'destroy']);
 
-        Route::get('/skills', [SkillController::class, 'index']);
         Route::post('/skills', [SkillController::class, 'store']);
         Route::put('/skills/{skill}', [SkillController::class, 'update']);
         Route::delete('/skills/{skill}', [SkillController::class, 'destroy']);

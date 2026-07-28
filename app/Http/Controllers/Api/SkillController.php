@@ -52,6 +52,38 @@ class SkillController extends Controller
     }
 
     /**
+     * Get skill details
+     *
+     * Retrieves the details of a specific skill.
+     *
+     * @authenticated
+     *
+     * @urlParam skill integer required The ID of the skill. Example: 1
+     *
+     * @response 200 {
+     *   "id": 1,
+     *   "skill_name": "Fireball",
+     *   "description": "Shoots a blazing fireball.",
+     *   "damage_skill": 50,
+     *   "skill_cost_magic_points": 20,
+     *   "created_at": "2024-03-15T10:00:00.000000Z",
+     *   "updated_at": "2024-03-15T10:00:00.000000Z"
+     * }
+     *
+     * @response 401 {
+     *   "message": "Unauthenticated."
+     * }
+     *
+     * @response 404 {
+     *   "message": "No query results for model [App\\Models\\Skill] 99999"
+     * }
+     */
+    public function show(Skill $skill)
+    {
+        return response()->json($skill, 200);
+    }
+
+    /**
      * Create a new skill
      * 
      * Adds a new skill to the game database.

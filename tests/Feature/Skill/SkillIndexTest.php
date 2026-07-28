@@ -25,7 +25,7 @@ it('admin can list all skills', function () {
              ]);
 });
 
-it('player cannot list all skills', function () {
+it('player can list all skills', function () {
 
     $player = User::factory()->create(['role' => 'player']);
 
@@ -35,7 +35,10 @@ it('player cannot list all skills', function () {
 
     $response = $this->getJson('/api/v1/skills');
 
-    $response->assertStatus(403);
+    $response->assertStatus(200)
+             ->assertJsonStructure([
+                 '*' => ['id', 'skill_name', 'description', 'damage_skill', 'skill_cost_magic_points']
+             ]);
 });
 
 it('fails to list skills if user is unauthenticated', function () {

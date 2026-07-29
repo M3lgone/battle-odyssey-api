@@ -5,6 +5,7 @@ use App\Models\Game;
 use App\Models\Battle;
 use App\Models\Character;
 use App\Models\Enemy;
+use App\Models\Skill;
 use Laravel\Passport\Passport;
 
 it('a player can view their own battle state', function () {
@@ -34,6 +35,12 @@ it('a player can view their own battle state', function () {
         'background_image_url' => 'bg-goblin.png',
     ]);
 
+    $characterSkill = Skill::factory()->create(['skill_name' => 'Slash']);
+    $character->skills()->attach($characterSkill->id);
+
+    $enemySkill = Skill::factory()->create(['skill_name' => 'Hack']);
+    $enemy->skills()->attach($enemySkill->id);
+
     $battle = Battle::create([
         'game_id' => $game->id,
         'character_id' => $character->id,
@@ -53,7 +60,9 @@ it('a player can view their own battle state', function () {
     $response->assertStatus(200)
              ->assertJsonFragment(['result' => 'ongoing'])
              ->assertJsonFragment(['class' => 'Warrior'])
-             ->assertJsonFragment(['enemy_name' => 'Goblin']);
+             ->assertJsonFragment(['enemy_name' => 'Goblin'])
+             ->assertJsonFragment(['skill_name' => 'Slash'])
+             ->assertJsonFragment(['skill_name' => 'Hack']);
 });
 
 it('a player cannot view another players battle', function () {

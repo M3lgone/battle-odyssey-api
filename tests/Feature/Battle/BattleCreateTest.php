@@ -5,6 +5,7 @@ use App\Models\Game;
 use App\Models\Character;
 use App\Models\Enemy;
 use App\Models\Battle;
+use App\Models\Skill;
 use Laravel\Passport\Passport;
 
 it('requires a game id and character id to create a battle', function () {
@@ -27,8 +28,14 @@ it('starts the second battle against the troll after one victory', function () {
 
     $character = Character::factory()->create(['character_image_url' => 'warrior.png']);
 
+    $characterSkill = Skill::factory()->create(['skill_name' => 'Slash']);
+    $character->skills()->attach($characterSkill->id);
+
     Enemy::factory()->create(['enemy_name' => 'Goblin']);
-    Enemy::factory()->create(['enemy_name' => 'Troll']);
+    $troll = Enemy::factory()->create(['enemy_name' => 'Troll']);
+
+    $trollSkill = Skill::factory()->create(['skill_name' => 'Smash']);
+    $troll->skills()->attach($trollSkill->id);
 
     Battle::factory()->create([
         'game_id' => $game->id,
@@ -43,7 +50,10 @@ it('starts the second battle against the troll after one victory', function () {
         'character_id' => $character->id,
     ]);
 
-    $response->assertStatus(201)->assertJsonFragment(['enemy_name' => 'Troll']);
+    $response->assertStatus(201)
+             ->assertJsonFragment(['enemy_name' => 'Troll'])
+             ->assertJsonFragment(['skill_name' => 'Slash'])
+             ->assertJsonFragment(['skill_name' => 'Smash']);
 });
 
 it('starts the final battle against the orc after two victories', function () {

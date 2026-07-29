@@ -49,7 +49,7 @@ class BattleService
         ]);
 
         $battle->enemies()->attach($enemy->id);
-        $battle->load(['character', 'enemies']);
+        $battle->load(['character.skills', 'enemies.skills']);
 
         return [
             'payload' => [

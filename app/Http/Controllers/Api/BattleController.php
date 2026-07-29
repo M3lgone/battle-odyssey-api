@@ -34,15 +34,47 @@ class BattleController extends Controller
      * @bodyParam character_id integer required The ID of the character fighting the battle. Example: 1
      * 
      * @response 201 {
-     *   "id": 12,
-     *   "game_id": 1,
-     *   "character_id": 1,
-     *   "result": "ongoing",
-     *   "character_current_hp": 120,
-     *   "character_current_mp": 100,
-     *   "enemy_current_hp": 150,
-     *   "enemy_current_mp": 50,
-     *   "enemy_name": "Troll"
+     *   "message": "Battle started successfully!",
+     *   "battle": {
+     *     "id": 12,
+     *     "game_id": 1,
+     *     "character_id": 1,
+     *     "result": "ongoing",
+     *     "character_current_hp": 120,
+     *     "character_current_mp": 100,
+     *     "enemy_current_hp": 150,
+     *     "enemy_current_mp": 50,
+     *     "total_damage_dealt": 0,
+     *     "total_damage_received": 0,
+     *     "character": {
+     *       "id": 1,
+     *       "class": "Warrior",
+     *       "skills": [
+     *         {
+     *           "id": 1,
+     *           "skill_name": "Slash",
+     *           "description": "A powerful sword slash.",
+     *           "damage_skill": 25,
+     *           "skill_cost_magic_points": 10
+     *         }
+     *       ]
+     *     },
+     *     "enemies": [
+     *       {
+     *         "id": 2,
+     *         "enemy_name": "Troll",
+     *         "skills": [
+     *           {
+     *             "id": 4,
+     *             "skill_name": "Smash",
+     *             "description": "Crushes everything with brutal strength",
+     *             "damage_skill": 30,
+     *             "skill_cost_magic_points": 15
+     *           }
+     *         ]
+     *       }
+     *     ]
+     *   }
      * }
      * 
      * @response 200 {
@@ -91,12 +123,30 @@ class BattleController extends Controller
      *   "enemy_current_hp": 80,
      *   "character": {
      *     "id": 1,
-     *     "class": "Warrior"
+     *     "class": "Warrior",
+     *     "skills": [
+     *       {
+     *         "id": 1,
+     *         "skill_name": "Slash",
+     *         "description": "A powerful sword slash.",
+     *         "damage_skill": 25,
+     *         "skill_cost_magic_points": 10
+     *       }
+     *     ]
      *   },
      *   "enemies": [
      *     {
      *       "id": 1,
-     *       "enemy_name": "Goblin"
+     *       "enemy_name": "Goblin",
+     *       "skills": [
+     *         {
+     *           "id": 3,
+     *           "skill_name": "Hack",
+     *           "description": "Swings a crude weapon with reckless forc.",
+     *           "damage_skill": 25,
+     *           "skill_cost_magic_points": 10
+     *         }
+     *       ]
      *     }
      *   ]
      * }
@@ -114,7 +164,7 @@ class BattleController extends Controller
         if ($battle->game->user_id !== auth()->id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-        $battle->load(['character', 'enemies']);
+        $battle->load(['character.skills', 'enemies.skills']);
 
         return response()->json($battle, 200);
     }
@@ -138,11 +188,29 @@ class BattleController extends Controller
      *       "id": 12,
      *       "result": "ongoing",
      *       "character": {
-     *         "class": "Warrior"
+     *         "class": "Warrior",
+     *         "skills": [
+     *           {
+     *             "id": 1,
+     *             "skill_name": "Slash",
+     *             "description": "A powerful sword slash.",
+     *             "damage_skill": 25,
+     *             "skill_cost_magic_points": 10
+     *           }
+     *         ]
      *       },
      *       "enemies": [
      *         {
-     *           "enemy_name": "Goblin"
+     *           "enemy_name": "Goblin",
+     *           "skills": [
+     *             {
+     *               "id": 3,
+     *               "skill_name": "Hack",
+     *               "description": "Swings a crude weapon with reckless forc.",
+     *               "damage_skill": 25,
+     *               "skill_cost_magic_points": 10
+     *             }
+     *           ]
      *         }
      *       ]
      *     },
@@ -169,7 +237,7 @@ class BattleController extends Controller
         }
 
         $battles = Battle::where('game_id', $game->id)
-            ->with(['character', 'enemies'])
+            ->with(['character.skills', 'enemies.skills'])
             ->orderBy('created_at', 'desc')
             ->get();
 

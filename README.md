@@ -164,13 +164,15 @@ Scribe generates a Postman collection automatically. In the docs menu, click **V
 | Enemies    | POST   | `/api/v1/enemies`               | Create an enemy                | 🛡️ Admin  |
 | Enemies    | PUT    | `/api/v1/enemies/{enemy}`       | Edit an enemy                  | 🛡️ Admin  |
 | Enemies    | DELETE | `/api/v1/enemies/{enemy}`       | Delete an enemy                | 🛡️ Admin  |
-| Skills     | GET    | `/api/v1/skills`                | List all skills                | 🛡️ Admin  |
+| Skills     | GET    | `/api/v1/skills`                | List all skills                | 🔑 Player / 🛡️ Admin |
+| Skills     | GET    | `/api/v1/skills/{skill}`        | Skill details                  | 🔑 Player / 🛡️ Admin |
 | Skills     | POST   | `/api/v1/skills`                | Create a skill                 | 🛡️ Admin  |
 | Skills     | PUT    | `/api/v1/skills/{skill}`        | Edit a skill                   | 🛡️ Admin  |
 | Skills     | DELETE | `/api/v1/skills/{skill}`        | Delete a skill                 | 🛡️ Admin  |
 | Games      | GET    | `/api/v1/games`                 | Load active game               | 🔑 Player |
 | Games      | POST   | `/api/v1/games`                 | Start a new game               | 🔑 Player |
 | Battles    | POST   | `/api/v1/battles`               | Start a new battle             | 🔑 Player |
+| Battles    | PUT    | `/api/v1/battles/{battle}`      | Update battle outcome          | 🔑 Player |
 | Battles    | GET    | `/api/v1/battles/{battle}`      | View battle status             | 🔑 Player |
 | Battles    | GET    | `/api/v1/games/{game}/battles`  | List game battle history       | 🔑 Player |
 

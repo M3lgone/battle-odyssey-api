@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained('games');
             $table->integer('character_current_hp');
             $table->integer('character_current_mp');
-            $table->integer('enemy_current_hp');
-            $table->integer('enemy_current_mp');
             $table->integer('total_damage_dealt');
             $table->integer('total_damage_received'); 
             $table->timestamps();

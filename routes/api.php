@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\BattleController;
         Route::get('/games', [GameController::class, 'index']);
 
         Route::post('/battles', [BattleController::class, 'store']);
+        Route::put('/battles/{battle}', [BattleController::class, 'update']);
 
         Route::get('/battles/{battle}', [BattleController::class, 'show']);
         Route::get('/games/{game}/battles', [BattleController::class, 'index']);

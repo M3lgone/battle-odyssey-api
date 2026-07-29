@@ -22,6 +22,10 @@ it('returns the active game for the authenticated user', function () {
                  'id' => $game->id,
                  'status' => 'active',
                  'user_id' => $player->id,
+                 'character_id' => $game->character_id,
+             ])
+             ->assertJsonStructure([
+                 'character' => ['id', 'class', 'skills']
              ]);
 });
 

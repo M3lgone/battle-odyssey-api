@@ -25,8 +25,6 @@ class BattleFactory extends Factory
             'game_id' => Game::factory(),
             'character_current_hp' => fake()->numberBetween(100, 200),
             'character_current_mp' => fake()->numberBetween(100, 200),
-            'enemy_current_hp' => fake()->numberBetween(50, 500),
-            'enemy_current_mp' => fake()->numberBetween(10, 100),
             'total_damage_dealt' => 0,
             'total_damage_received' => 0,
         ];

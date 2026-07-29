@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('battle_has_enemy', function (Blueprint $table) {
             $table->foreignId('battle_id')->constrained('battles')->cascadeOnDelete();
             $table->foreignId('enemy_id')->constrained('enemies')->cascadeOnDelete();
+            $table->integer('current_hp');
+            $table->integer('current_mp');
             $table->primary(['battle_id', 'enemy_id']);
         });
     }

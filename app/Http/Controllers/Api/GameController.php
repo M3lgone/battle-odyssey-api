@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Game;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreGameRequest;
 use App\Services\GameService;
 use InvalidArgumentException;
 
@@ -30,7 +31,8 @@ class GameController extends Controller
     /**
      * Get active game
      * 
-     * Retrieves the currently active game for the authenticated user.
+     * Retrieves the currently active game for the authenticated user, including 
+     * the character chosen for the run and its skills.
      * Returns a 404 error if the user does not have a game with an 'active' status.
      * 
      * @group Games
@@ -39,9 +41,28 @@ class GameController extends Controller
      * @response 200 {
      *   "id": 1,
      *   "user_id": 5,
+     *   "character_id": 2,
      *   "status": "active",
      *   "created_at": "2024-05-20T10:00:00.000000Z",
-     *   "updated_at": "2024-05-20T10:00:00.000000Z"
+     *   "updated_at": "2024-05-20T10:00:00.000000Z",
+     *   "character": {
+     *     "id": 2,
+     *     "class": "Mage",
+     *     "attack": 30,
+     *     "defense": 15,
+     *     "max_health_points": 150,
+     *     "max_magic_points": 200,
+     *     "character_image_url": "mage.png",
+     *     "skills": [
+     *       {
+     *         "id": 1,
+     *         "skill_name": "Fireball",
+     *         "description": "Conjures a ball of fire to incinerate",
+     *         "damage_skill": 30,
+     *         "skill_cost_magic_points": 10
+     *       }
+     *     ]
+     *   }
      * }
      * 
      * @response 401 {
@@ -68,38 +89,67 @@ class GameController extends Controller
     /**
      * Start a new game
      * 
-     * Creates a new game instance for the authenticated user and sets its status to 'active'.
+     * Creates a new game instance for the authenticated user with the chosen character 
+     * and sets its status to 'active'. The character is fixed for the whole run: 
+     * all battles of the game will be fought with it.
      * A user can only have one game in 'active' status at a time.
      * 
      * @group Games
      * @authenticated
      * 
+     * @bodyParam character_id integer required The ID of the character chosen for the run. Example: 2
+     * 
      * @response 201 {
      *   "id": 2,
      *   "user_id": 5,
+     *   "character_id": 2,
      *   "status": "active",
      *   "created_at": "2024-05-20T10:05:00.000000Z",
-     *   "updated_at": "2024-05-20T10:05:00.000000Z"
+     *   "updated_at": "2024-05-20T10:05:00.000000Z",
+     *   "character": {
+     *     "id": 2,
+     *     "class": "Mage",
+     *     "skills": [
+     *       {
+     *         "id": 1,
+     *         "skill_name": "Fireball",
+     *         "damage_skill": 30,
+     *         "skill_cost_magic_points": 10
+     *       }
+     *     ]
+     *   }
      * }
      * 
      * @response 400 {
-     *   "error": "You already have an active game, you must finish it to start another one."
+     *   "message": "You already have an active game, you must finish it to start another one."
      * }
      * 
      * @response 401 {
      *   "message": "Unauthenticated."
      * }
+     * 
+     * @response 422 {
+     *   "message": "The character id field is required.",
+     *   "errors": {
+     *     "character_id": [
+     *       "The character id field is required."
+     *     ]
+     *   }
+     * }
      */
-    public function store(Request $request)
+    public function store(StoreGameRequest $request)
     {
         try {
-            $game = $this->gameService->createGame($request->user()->id);
+            $game = $this->gameService->createGame(
+                $request->user()->id,
+                $request->validated('character_id')
+            );
             
             return response()->json($game, 201);
             
         } catch (InvalidArgumentException $e) {
             return response()->json([
-                'error' => $e->getMessage()
+                'message' => $e->getMessage()
             ], 400);
         }
     }

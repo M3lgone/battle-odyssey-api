@@ -12,11 +12,17 @@ class Game extends Model
     protected $fillable = [
         'status',
         'user_id',
+        'character_id',
     ];
 
     public function user() 
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function character()
+    {
+        return $this->belongsTo(Character::class);
     }
 
     public function battles() 

@@ -4,21 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Game;
 
-class StoreBattleRequest extends FormRequest
+class StoreGameRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $game = Game::find($this->input('game_id'));
-
-        if (!$game) {
-            return true;
-        }
-        return $game->user_id === $this->user()->id;
+        return true;
     }
 
     /**
@@ -29,7 +23,7 @@ class StoreBattleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'game_id' => 'required|exists:games,id',
+            'character_id' => 'required|exists:characters,id',
         ];
     }
 }

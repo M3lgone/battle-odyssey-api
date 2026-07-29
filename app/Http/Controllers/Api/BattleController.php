@@ -23,15 +23,15 @@ class BattleController extends Controller
     /**
      * Start a new battle
      * 
-     * Initiates a new battle for a specific active game and character. The system 
-     * automatically selects the next enemy based on the player's progression 
-     * (e.g., Goblin -> Troll -> Orc). If the player has already defeated 
-     * the final boss, the game status becomes 'finished' and it returns a victory message.
+     * Initiates a new battle for a specific active game. The character is the one 
+     * chosen when the game was created and starts every battle fully healed.
+     * The system automatically selects the next enemy based on the number of battles 
+     * already won (e.g., Goblin -> Troll -> Orc). Enemy current HP/MP are stored 
+     * per enemy in the battle pivot, ready for future multi-enemy battles.
      * 
      * @authenticated
      * 
      * @bodyParam game_id integer required The ID of the active game. Must belong to the authenticated user. Example: 1
-     * @bodyParam character_id integer required The ID of the character fighting the battle. Example: 1
      * 
      * @response 201 {
      *   "message": "Battle started successfully!",
@@ -80,7 +80,12 @@ class BattleController extends Controller
      * }
      * 
      * @response 200 {
-     *   "message": "Victory! The game has finished."
+     *   "message": "Victory",
+     *   "game_won": true
+     * }
+     * 
+     * @response 400 {
+     *   "message": "This game is already finished."
      * }
      * 
      * @response 403 {
@@ -99,8 +104,7 @@ class BattleController extends Controller
     public function store(StoreBattleRequest $request, BattleService $battleService)
     {
         $result = $battleService->startBattle(
-            $request->validated('game_id'), 
-            $request->validated('character_id')
+            $request->validated('game_id')
         );
         return response()->json($result['payload'], $result['status']);
     }

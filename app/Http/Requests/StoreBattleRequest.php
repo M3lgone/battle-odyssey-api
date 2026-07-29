@@ -30,7 +30,6 @@ class StoreBattleRequest extends FormRequest
     {
         return [
             'game_id' => 'required|exists:games,id',
-            'character_id' => 'required|exists:characters,id',
         ];
     }
 }

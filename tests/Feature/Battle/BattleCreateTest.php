@@ -8,7 +8,7 @@ use App\Models\Battle;
 use App\Models\Skill;
 use Laravel\Passport\Passport;
 
-it('requires a game id and character id to create a battle', function () {
+it('requires a game id to create a battle', function () {
 
     $user = User::factory()->create(['role' => 'player']);
 
@@ -17,16 +17,20 @@ it('requires a game id and character id to create a battle', function () {
     $response = $this->postJson('/api/v1/battles', []);
 
     $response->assertStatus(422)
-             ->assertJsonValidationErrors(['game_id', 'character_id']);
+             ->assertJsonValidationErrors(['game_id']);
 });
 
 it('starts the second battle against the troll after one victory', function () {
 
     $user = User::factory()->create(['role' => 'player']);
 
-    $game = Game::factory()->create(['user_id' => $user->id]);
-
     $character = Character::factory()->create(['character_image_url' => 'warrior.png']);
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
+    ]);
 
     $characterSkill = Skill::factory()->create(['skill_name' => 'Slash']);
     $character->skills()->attach($characterSkill->id);
@@ -34,7 +38,7 @@ it('starts the second battle against the troll after one victory', function () {
     Enemy::factory()->create(['enemy_name' => 'Goblin']);
     $troll = Enemy::factory()->create(['enemy_name' => 'Troll']);
 
-    $trollSkill = Skill::factory()->create(['skill_name' => 'Smash']);
+    $trollSkill = Skill::factory()->create(['skill_name' => 'Club Smash']);
     $troll->skills()->attach($trollSkill->id);
 
     Battle::factory()->create([
@@ -47,23 +51,65 @@ it('starts the second battle against the troll after one victory', function () {
 
     $response = $this->postJson('/api/v1/battles', [
         'game_id' => $game->id,
-        'character_id' => $character->id,
     ]);
 
     $response->assertStatus(201)
              ->assertJsonFragment(['enemy_name' => 'Troll'])
              ->assertJsonFragment(['skill_name' => 'Slash'])
-             ->assertJsonFragment(['skill_name' => 'Smash']);
+             ->assertJsonFragment(['skill_name' => 'Club Smash']);
+});
+
+it('starts the battle with the character fully healed and the enemy hp stored in the pivot', function () {
+
+    $user = User::factory()->create(['role' => 'player']);
+
+    $character = Character::factory()->create([
+        'max_health_points' => 120,
+        'max_magic_points' => 100,
+    ]);
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
+    ]);
+
+    $enemy = Enemy::factory()->create([
+        'max_health_points' => 80,
+        'max_magic_points' => 30,
+    ]);
+
+    Passport::actingAs($user);
+
+    $response = $this->postJson('/api/v1/battles', [
+        'game_id' => $game->id,
+    ]);
+
+    $response->assertStatus(201)
+             ->assertJsonFragment(['character_current_hp' => 120])
+             ->assertJsonFragment(['character_current_mp' => 100])
+             ->assertJsonFragment(['current_hp' => 80])
+             ->assertJsonFragment(['current_mp' => 30]);
+
+    $this->assertDatabaseHas('battle_has_enemy', [
+        'enemy_id' => $enemy->id,
+        'current_hp' => 80,
+        'current_mp' => 30,
+    ]);
 });
 
 it('starts the final battle against the orc after two victories', function () {
 
     $user = User::factory()->create(['role' => 'player']);
 
-    $game = Game::factory()->create(['user_id' => $user->id]);
-
     $character = Character::factory()->create([
         'character_image_url' => 'warrior.png'
+    ]);
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
     ]);
 
     Enemy::factory()->create(['enemy_name' => 'Goblin', 'enemy_image_url' => 'url', 'background_image_url' => 'url']);
@@ -80,7 +126,6 @@ it('starts the final battle against the orc after two victories', function () {
 
     $response = $this->postJson('/api/v1/battles', [
         'game_id' => $game->id,
-        'character_id' => $character->id,
     ]);
 
     $response->assertStatus(201)
@@ -89,17 +134,52 @@ it('starts the final battle against the orc after two victories', function () {
              ]);
 });
 
-it('returns victory when requesting a battle after defeating the orc', function () {
+it('does not count losses or flees towards enemy progression', function () {
 
     $user = User::factory()->create(['role' => 'player']);
 
-    $game = Game::factory()->create(['user_id' => $user->id]);
+    $character = Character::factory()->create();
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
+    ]);
+
+    Enemy::factory()->create(['enemy_name' => 'Goblin']);
+    Enemy::factory()->create(['enemy_name' => 'Troll']);
+
+    Battle::factory()->create([
+        'game_id' => $game->id,
+        'character_id' => $character->id,
+        'result' => 'loss',
+    ]);
+
+    Passport::actingAs($user);
+
+    $response = $this->postJson('/api/v1/battles', [
+        'game_id' => $game->id,
+    ]);
+
+    $response->assertStatus(201)
+             ->assertJsonFragment(['enemy_name' => 'Goblin']);
+});
+
+it('returns victory and finishes the game when no enemies remain', function () {
+
+    $user = User::factory()->create(['role' => 'player']);
 
     $character = Character::factory()->create([
         'character_image_url' => 'warrior.png'
     ]);
 
-   Battle::factory()->count(3)->create([
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
+    ]);
+
+    Battle::factory()->count(3)->create([
         'game_id' => $game->id,
         'character_id' => $character->id,
         'result' => 'win',
@@ -109,12 +189,71 @@ it('returns victory when requesting a battle after defeating the orc', function 
 
     $response = $this->postJson('/api/v1/battles', [
         'game_id' => $game->id,
-        'character_id' => $character->id,
     ]);
 
     $response->assertStatus(200)
              ->assertJsonFragment([
                  'message' => 'Victory' 
+             ]);
+
+    $this->assertDatabaseHas('games', [
+        'id' => $game->id,
+        'status' => 'finished',
+    ]);
+});
+
+it('prevents creating a battle on a finished game', function () {
+
+    $user = User::factory()->create(['role' => 'player']);
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'status' => 'finished',
+    ]);
+
+    Enemy::factory()->create(['enemy_name' => 'Goblin']);
+
+    Passport::actingAs($user);
+
+    $response = $this->postJson('/api/v1/battles', [
+        'game_id' => $game->id,
+    ]);
+
+    $response->assertStatus(400)
+             ->assertJsonFragment([
+                 'message' => 'This game is already finished.'
+             ]);
+});
+
+it('prevents creating a battle while another one is ongoing', function () {
+
+    $user = User::factory()->create(['role' => 'player']);
+
+    $character = Character::factory()->create();
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
+    ]);
+
+    Enemy::factory()->create(['enemy_name' => 'Goblin']);
+
+    Battle::factory()->create([
+        'game_id' => $game->id,
+        'character_id' => $character->id,
+        'result' => 'ongoing',
+    ]);
+
+    Passport::actingAs($user);
+
+    $response = $this->postJson('/api/v1/battles', [
+        'game_id' => $game->id,
+    ]);
+
+    $response->assertStatus(400)
+             ->assertJsonFragment([
+                 'error' => 'You already have an ongoing battle.'
              ]);
 });
 
@@ -126,19 +265,16 @@ it('prevents a user from creating a battle for a game they do not own', function
     
     $game = Game::factory()->create(['user_id' => $playerTwo->id]);
 
-    $character = Character::factory()->create();
-
     Passport::actingAs($playerOne);
 
     $response = $this->postJson('/api/v1/battles', [
         'game_id' => $game->id,
-        'character_id' => $character->id,
     ]);
 
     $response->assertStatus(403);
 });
 
-it('returns validation errors if the game or character does not exist', function () {
+it('returns validation errors if the game does not exist', function () {
     
     $user = User::factory()->create(['role' => 'player']);
 
@@ -146,18 +282,16 @@ it('returns validation errors if the game or character does not exist', function
 
     $response = $this->postJson('/api/v1/battles', [
         'game_id' => 99999, 
-        'character_id' => 99999, 
     ]);
 
     $response->assertStatus(422)
-             ->assertJsonValidationErrors(['game_id', 'character_id']);
+             ->assertJsonValidationErrors(['game_id']);
 });
 
 it('prevents an unauthenticated user from creating a battle', function () {
 
     $response = $this->postJson('/api/v1/battles', [
         'game_id' => 1,
-        'character_id' => 1,
     ]);
 
     $response->assertStatus(401);

@@ -27,7 +27,7 @@ class BattleService
 
         if ($ongoingBattle) {
             return [
-                'payload' => ['error' => 'You already have an ongoing battle.'],
+                'payload' => ['message' => 'You already have an ongoing battle.'],
                 'status'  => 400
             ];
         }

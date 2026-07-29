@@ -121,7 +121,7 @@ class GameController extends Controller
      * }
      * 
      * @response 400 {
-     *   "error": "You already have an active game, you must finish it to start another one."
+     *   "message": "You already have an active game, you must finish it to start another one."
      * }
      * 
      * @response 401 {
@@ -149,7 +149,7 @@ class GameController extends Controller
             
         } catch (InvalidArgumentException $e) {
             return response()->json([
-                'error' => $e->getMessage()
+                'message' => $e->getMessage()
             ], 400);
         }
     }

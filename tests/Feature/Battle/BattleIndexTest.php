@@ -102,7 +102,7 @@ it('cannot get the battle history of another players game', function () {
     $response = $this->getJson("/api/v1/games/{$gameTwo->id}/battles");
 
     $response->assertStatus(403)
-             ->assertJsonFragment(['error' => 'Unauthorized. This game does not belong to you.']);
+             ->assertJsonFragment(['message' => 'Unauthorized. This game does not belong to you.']);
 });
 
 it('returns 404 if the game does not exist when getting battles', function () {

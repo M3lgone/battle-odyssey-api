@@ -264,7 +264,7 @@ class BattleController extends Controller
      * }
      * 
      * @response 403 {
-     *   "error": "Unauthorized"
+     *   "message": "Unauthorized"
      * }
      * 
      * @response 404 {
@@ -274,7 +274,7 @@ class BattleController extends Controller
     public function show(Battle $battle)
     {
         if ($battle->game->user_id !== auth()->id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
         $battle->load(['character.skills', 'enemies.skills']);
 
@@ -338,7 +338,7 @@ class BattleController extends Controller
      * }
      * 
      * @response 403 {
-     *   "error": "Unauthorized. This game does not belong to you."
+     *   "message": "Unauthorized. This game does not belong to you."
      * }
      * 
      * @response 404 {
@@ -349,7 +349,7 @@ class BattleController extends Controller
     {
 
         if ($game->user_id !== auth()->id()) {
-            return response()->json(['error' => 'Unauthorized. This game does not belong to you.'], 403);
+            return response()->json(['message' => 'Unauthorized. This game does not belong to you.'], 403);
         }
 
         $battles = Battle::where('game_id', $game->id)

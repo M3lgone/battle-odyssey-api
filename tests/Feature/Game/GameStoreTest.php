@@ -86,7 +86,7 @@ it('fails to start a game if the player already has an active game', function ()
 
     $response->assertStatus(400)
              ->assertJson([
-                 'error' => 'You already have an active game, you must finish it to start another one.'
+                 'message' => 'You already have an active game, you must finish it to start another one.'
              ]);
 });
 

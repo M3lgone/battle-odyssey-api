@@ -253,7 +253,7 @@ it('prevents creating a battle while another one is ongoing', function () {
 
     $response->assertStatus(400)
              ->assertJsonFragment([
-                 'error' => 'You already have an ongoing battle.'
+                 'message' => 'You already have an ongoing battle.'
              ]);
 });
 

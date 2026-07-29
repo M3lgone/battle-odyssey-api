@@ -14,8 +14,6 @@ it('a player can view their own battle state', function () {
 
     Passport::actingAs($user);
 
-    $game = Game::create(['user_id' => $user->id, 'status' => 'active']);
-    
     $character = Character::create([
         'class' => 'Warrior',
         'attack' => 15,
@@ -23,6 +21,12 @@ it('a player can view their own battle state', function () {
         'max_health_points' => 120,
         'max_magic_points' => 100,
         'character_image_url' => 'warrior.png',
+    ]);
+
+    $game = Game::create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
     ]);
 
     $enemy = Enemy::create([
@@ -73,8 +77,6 @@ it('a player cannot view another players battle', function () {
     
     Passport::actingAs($playerOne);
 
-    $game = Game::create(['user_id' => $playerTwo->id, 'status' => 'active']);
-
     $character = Character::create([
         'class' => 'Mage',
         'attack' => 10,
@@ -82,6 +84,12 @@ it('a player cannot view another players battle', function () {
         'max_health_points' => 100,
         'max_magic_points' => 120,
         'character_image_url' => 'mage.png',
+    ]);
+
+    $game = Game::create([
+        'user_id' => $playerTwo->id,
+        'character_id' => $character->id,
+        'status' => 'active',
     ]);
     
     $battle = Battle::create([

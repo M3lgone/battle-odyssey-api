@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Game;
 use App\Models\User;
+use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,7 @@ class GameFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
+            'character_id' => Character::factory(),
             'status' => fake()->randomElement(['active', 'finished']),
         ];
     }

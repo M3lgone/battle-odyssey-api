@@ -14,8 +14,6 @@ it('can get the battle history of a game', function () {
 
     Passport::actingAs($user);
 
-    $game = Game::create(['user_id' => $user->id, 'status' => 'active']);
-    
     $character = Character::create([
         'class' => 'Warrior',
         'attack' => 15,
@@ -23,6 +21,12 @@ it('can get the battle history of a game', function () {
         'max_health_points' => 120,
         'max_magic_points' => 100,
         'character_image_url' => 'warrior.png',
+    ]);
+
+    $game = Game::create([
+        'user_id' => $user->id,
+        'character_id' => $character->id,
+        'status' => 'active',
     ]);
 
     $enemy = Enemy::create([
@@ -76,7 +80,7 @@ it('can get the battle history of a game', function () {
              ->assertJsonFragment(['enemy_name' => 'Goblin'])
              ->assertJsonFragment(['skill_name' => 'Slash'])
              ->assertJsonFragment(['skill_name' => 'Hack']);
-             
+              
     expect($response->json('battles'))->toHaveCount(2);
 });
 
@@ -87,7 +91,11 @@ it('cannot get the battle history of another players game', function () {
     
     Passport::actingAs($playerOne);
 
-    $gameTwo = Game::create(['user_id' => $playerTwo->id, 'status' => 'active']);
+    $gameTwo = Game::create([
+        'user_id' => $playerTwo->id,
+        'character_id' => Character::factory()->create()->id,
+        'status' => 'active',
+    ]);
 
     $response = $this->getJson("/api/v1/games/{$gameTwo->id}/battles");
 

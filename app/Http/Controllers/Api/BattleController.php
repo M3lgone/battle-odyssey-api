@@ -42,8 +42,6 @@ class BattleController extends Controller
      *     "result": "ongoing",
      *     "character_current_hp": 120,
      *     "character_current_mp": 100,
-     *     "enemy_current_hp": 150,
-     *     "enemy_current_mp": 50,
      *     "total_damage_dealt": 0,
      *     "total_damage_received": 0,
      *     "character": {
@@ -71,7 +69,11 @@ class BattleController extends Controller
      *             "damage_skill": 30,
      *             "skill_cost_magic_points": 15
      *           }
-     *         ]
+     *         ],
+     *         "pivot": {
+     *           "current_hp": 150,
+     *           "current_mp": 50
+     *         }
      *       }
      *     ]
      *   }
@@ -120,7 +122,6 @@ class BattleController extends Controller
      *   "character_id": 1,
      *   "result": "ongoing",
      *   "character_current_hp": 120,
-     *   "enemy_current_hp": 80,
      *   "character": {
      *     "id": 1,
      *     "class": "Warrior",
@@ -146,7 +147,11 @@ class BattleController extends Controller
      *           "damage_skill": 25,
      *           "skill_cost_magic_points": 10
      *         }
-     *       ]
+     *       ],
+     *       "pivot": {
+     *         "current_hp": 80,
+     *         "current_mp": 30
+     *       }
      *     }
      *   ]
      * }
@@ -210,7 +215,11 @@ class BattleController extends Controller
      *               "damage_skill": 25,
      *               "skill_cost_magic_points": 10
      *             }
-     *           ]
+     *           ],
+     *           "pivot": {
+     *             "current_hp": 0,
+     *             "current_mp": 30
+     *           }
      *         }
      *       ]
      *     },

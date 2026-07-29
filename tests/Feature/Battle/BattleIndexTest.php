@@ -51,12 +51,13 @@ it('can get the battle history of a game', function () {
         'result' => 'win',
         'character_current_hp' => 50,
         'character_current_mp' => 10,
-        'enemy_current_hp' => 0,
-        'enemy_current_mp' => 0,
         'total_damage_dealt' => 80,
         'total_damage_received' => 70,
     ]);
-    $battle1->enemies()->attach($enemy->id);
+    $battle1->enemies()->attach($enemy->id, [
+        'current_hp' => 0,
+        'current_mp' => 30,
+    ]);
 
     $battle2 = Battle::create([
         'game_id' => $game->id,
@@ -64,12 +65,13 @@ it('can get the battle history of a game', function () {
         'result' => 'ongoing',
         'character_current_hp' => 120,
         'character_current_mp' => 100,
-        'enemy_current_hp' => 80,
-        'enemy_current_mp' => 30,
         'total_damage_dealt' => 0,
         'total_damage_received' => 0,
     ]);
-    $battle2->enemies()->attach($enemy->id);
+    $battle2->enemies()->attach($enemy->id, [
+        'current_hp' => 80,
+        'current_mp' => 30,
+    ]);
 
     $response = $this->getJson("/api/v1/games/{$game->id}/battles");
 

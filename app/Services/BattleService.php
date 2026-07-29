@@ -42,13 +42,14 @@ class BattleService
             'result' => 'ongoing',
             'character_current_hp' => $character->max_health_points,
             'character_current_mp' => $character->max_magic_points,
-            'enemy_current_hp' => $enemy->max_health_points,
-            'enemy_current_mp' => $enemy->max_magic_points,
             'total_damage_dealt' => 0,
             'total_damage_received' => 0,
         ]);
 
-        $battle->enemies()->attach($enemy->id);
+        $battle->enemies()->attach($enemy->id, [
+            'current_hp' => $enemy->max_health_points,
+            'current_mp' => $enemy->max_magic_points,
+        ]);
         $battle->load(['character.skills', 'enemies.skills']);
 
         return [

@@ -51,13 +51,14 @@ it('a player can view their own battle state', function () {
         'result' => 'ongoing',
         'character_current_hp' => $character->max_health_points,
         'character_current_mp' => $character->max_magic_points,
-        'enemy_current_hp' => $enemy->max_health_points,
-        'enemy_current_mp' => $enemy->max_magic_points,
         'total_damage_dealt' => 0,
         'total_damage_received' => 0,
     ]);
     
-    $battle->enemies()->attach($enemy->id);
+    $battle->enemies()->attach($enemy->id, [
+        'current_hp' => $enemy->max_health_points,
+        'current_mp' => $enemy->max_magic_points,
+    ]);
 
     $response = $this->getJson("/api/v1/battles/{$battle->id}");
 
@@ -66,7 +67,9 @@ it('a player can view their own battle state', function () {
              ->assertJsonFragment(['class' => 'Warrior'])
              ->assertJsonFragment(['enemy_name' => 'Goblin'])
              ->assertJsonFragment(['skill_name' => 'Slash'])
-             ->assertJsonFragment(['skill_name' => 'Hack']);
+             ->assertJsonFragment(['skill_name' => 'Hack'])
+             ->assertJsonFragment(['current_hp' => 80])
+             ->assertJsonFragment(['current_mp' => 30]);
 });
 
 it('a player cannot view another players battle', function () {
@@ -98,8 +101,6 @@ it('a player cannot view another players battle', function () {
         'result' => 'ongoing',
         'character_current_hp' => 100,
         'character_current_mp' => 50,
-        'enemy_current_hp' => 80,
-        'enemy_current_mp' => 30,
         'total_damage_dealt' => 0,
         'total_damage_received' => 0,
     ]);

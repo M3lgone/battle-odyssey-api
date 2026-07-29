@@ -15,8 +15,6 @@ class Battle extends Model
         'game_id',
         'character_current_hp',
         'character_current_mp',
-        'enemy_current_hp',
-        'enemy_current_mp',
         'total_damage_dealt',
         'total_damage_received',
     ];
@@ -33,6 +31,7 @@ class Battle extends Model
 
     public function enemies()
     {
-        return $this->belongsToMany(Enemy::class, 'battle_has_enemy');
+        return $this->belongsToMany(Enemy::class, 'battle_has_enemy')
+                    ->withPivot(['current_hp', 'current_mp']);
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Character;
 use App\Models\Enemy;
 use App\Models\Game;
 use App\Http\Requests\StoreBattleRequest;
+use App\Http\Requests\UpdateBattleRequest;
 use App\Services\BattleService;
 
 
@@ -17,6 +18,8 @@ use App\Services\BattleService;
  *
  * APIs for managing the combat system.
  * A battle always belongs to an 'active' game session.
+ * The combat itself is resolved on the client; these endpoints create battles,
+ * persist their outcome and apply the resulting game state transitions.
  */
 class BattleController extends Controller
 {
@@ -106,6 +109,105 @@ class BattleController extends Controller
         $result = $battleService->startBattle(
             $request->validated('game_id')
         );
+        return response()->json($result['payload'], $result['status']);
+    }
+
+    /**
+     * Update a battle
+     * 
+     * Persists the outcome of a battle once the combat has been resolved on the 
+     * client: final result, character and enemy HP/MP, and damage totals.
+     * Only a battle in 'ongoing' state can be updated, and only by the owner 
+     * of the game. State transitions are applied automatically: the game is 
+     * finished when the battle is lost, fled, or when the final enemy is defeated.
+     * 
+     * @authenticated
+     * 
+     * @urlParam battle integer required The ID of the battle to update. Example: 12
+     * 
+     * @bodyParam result string required The battle outcome. One of: win, loss, flee. Example: win
+     * @bodyParam character_current_hp integer required Final HP of the character. Minimum: 0. Example: 45
+     * @bodyParam character_current_mp integer required Final MP of the character. Minimum: 0. Example: 30
+     * @bodyParam total_damage_dealt integer required Total damage dealt to enemies. Minimum: 0. Example: 150
+     * @bodyParam total_damage_received integer required Total damage received by the character. Minimum: 0. Example: 75
+     * @bodyParam enemies array required Final state of every enemy involved in the battle.
+     * @bodyParam enemies[].id integer required The ID of the enemy. Must belong to the battle. Example: 2
+     * @bodyParam enemies[].current_hp integer required Final HP of the enemy. Minimum: 0. Example: 0
+     * @bodyParam enemies[].current_mp integer required Final MP of the enemy. Minimum: 0. Example: 20
+     * 
+     * @response 200 {
+     *   "message": "Battle updated successfully.",
+     *   "game_status": "active",
+     *   "battle": {
+     *     "id": 12,
+     *     "game_id": 1,
+     *     "result": "win",
+     *     "character_current_hp": 45,
+     *     "character_current_mp": 30,
+     *     "total_damage_dealt": 150,
+     *     "total_damage_received": 75,
+     *     "character": {
+     *       "id": 1,
+     *       "class": "Warrior",
+     *       "skills": [
+     *         {
+     *           "id": 1,
+     *           "skill_name": "Slash",
+     *           "damage_skill": 25,
+     *           "skill_cost_magic_points": 10
+     *         }
+     *       ]
+     *     },
+     *     "enemies": [
+     *       {
+     *         "id": 2,
+     *         "enemy_name": "Troll",
+     *         "skills": [
+     *           {
+     *             "id": 4,
+     *             "skill_name": "Smash",
+     *             "damage_skill": 30,
+     *             "skill_cost_magic_points": 15
+     *           }
+     *         ],
+     *         "pivot": {
+     *           "current_hp": 0,
+     *           "current_mp": 20
+     *         }
+     *       }
+     *     ]
+     *   }
+     * }
+     * 
+     * @response 400 {
+     *   "message": "This battle has already been resolved."
+     * }
+     * 
+     * @response 401 {
+     *   "message": "Unauthenticated."
+     * }
+     * 
+     * @response 403 {
+     *   "message": "This action is unauthorized."
+     * }
+     * 
+     * @response 404 {
+     *   "message": "No query results for model [App\\Models\\Battle] 99999"
+     * }
+     * 
+     * @response 422 {
+     *   "message": "The result field is required.",
+     *   "errors": {
+     *     "result": [
+     *       "The result field is required."
+     *     ]
+     *   }
+     * }
+     */
+    public function update(UpdateBattleRequest $request, Battle $battle, BattleService $battleService)
+    {
+        $result = $battleService->finishBattle($battle, $request->validated());
+
         return response()->json($result['payload'], $result['status']);
     }
 

@@ -54,9 +54,9 @@ class BattleController extends Controller
      *         {
      *           "id": 1,
      *           "skill_name": "Slash",
-     *           "description": "A powerful sword slash.",
-     *           "damage_skill": 25,
-     *           "skill_cost_magic_points": 10
+     *           "description": "Strikes the enemy with a swift sword slash",
+     *           "damage_skill": 20,
+     *           "skill_cost_magic_points": 15
      *         }
      *       ]
      *     },
@@ -69,8 +69,8 @@ class BattleController extends Controller
      *             "id": 4,
      *             "skill_name": "Smash",
      *             "description": "Crushes everything with brutal strength",
-     *             "damage_skill": 30,
-     *             "skill_cost_magic_points": 15
+     *             "damage_skill": 25,
+     *             "skill_cost_magic_points": 10
      *           }
      *         ],
      *         "pivot": {
@@ -153,8 +153,8 @@ class BattleController extends Controller
      *         {
      *           "id": 1,
      *           "skill_name": "Slash",
-     *           "damage_skill": 25,
-     *           "skill_cost_magic_points": 10
+     *           "damage_skill": 20,
+     *           "skill_cost_magic_points": 15
      *         }
      *       ]
      *     },
@@ -166,8 +166,8 @@ class BattleController extends Controller
      *           {
      *             "id": 4,
      *             "skill_name": "Smash",
-     *             "damage_skill": 30,
-     *             "skill_cost_magic_points": 15
+     *             "damage_skill": 25,
+     *             "skill_cost_magic_points": 10
      *           }
      *         ],
      *         "pivot": {
@@ -215,8 +215,9 @@ class BattleController extends Controller
      * View battle details
      * 
      * Retrieves the current state and specific details of a single battle, 
-     * including the character stats and the enemies involved. The battle 
-     * must belong to a game owned by the authenticated user.
+     * including the character stats and skills, and the enemies involved with 
+     * their skills and current HP/MP. The battle must belong to a game owned 
+     * by the authenticated user.
      * 
      * @authenticated
      * 
@@ -235,9 +236,9 @@ class BattleController extends Controller
      *       {
      *         "id": 1,
      *         "skill_name": "Slash",
-     *         "description": "A powerful sword slash.",
-     *         "damage_skill": 25,
-     *         "skill_cost_magic_points": 10
+     *         "description": "Strikes the enemy with a swift sword slash",
+     *         "damage_skill": 20,
+     *         "skill_cost_magic_points": 15
      *       }
      *     ]
      *   },
@@ -248,10 +249,10 @@ class BattleController extends Controller
      *       "skills": [
      *         {
      *           "id": 3,
-     *           "skill_name": "Hack",
-     *           "description": "Swings a crude weapon with reckless forc.",
-     *           "damage_skill": 25,
-     *           "skill_cost_magic_points": 10
+     *         "skill_name": "Hack",
+     *         "description": "Swings a crude weapon with reckless force",
+     *         "damage_skill": 15,
+     *         "skill_cost_magic_points": 5
      *         }
      *       ],
      *       "pivot": {
@@ -304,9 +305,9 @@ class BattleController extends Controller
      *           {
      *             "id": 1,
      *             "skill_name": "Slash",
-     *             "description": "A powerful sword slash.",
-     *             "damage_skill": 25,
-     *             "skill_cost_magic_points": 10
+     *             "description": "Strikes the enemy with a swift sword slash",
+     *             "damage_skill": 20,
+     *             "skill_cost_magic_points": 15
      *           }
      *         ]
      *       },
@@ -317,9 +318,9 @@ class BattleController extends Controller
      *             {
      *               "id": 3,
      *               "skill_name": "Hack",
-     *               "description": "Swings a crude weapon with reckless forc.",
-     *               "damage_skill": 25,
-     *               "skill_cost_magic_points": 10
+     *               "description": "Swings a crude weapon with reckless force",
+     *               "damage_skill": 15,
+     *               "skill_cost_magic_points": 5
      *             }
      *           ],
      *           "pivot": {

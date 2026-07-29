@@ -91,10 +91,10 @@ class EnemyController extends Controller
      *   "skills": [
      *     {
      *       "id": 1,
-     *       "skill_name": "Venom Spit",
-     *       "description": "Spits deadly venom.",
-     *       "damage_skill": 25,
-     *       "skill_cost_magic_points": 10
+     *       "skill_name": "Hack",
+     *       "description": "Swings a crude weapon with reckless force",
+     *       "damage_skill": 15,
+     *       "skill_cost_magic_points": 5
      *     }
      *   ]
      * }

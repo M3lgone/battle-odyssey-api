@@ -57,9 +57,9 @@ class GameController extends Controller
      *       {
      *         "id": 1,
      *         "skill_name": "Fireball",
-     *         "description": "Shoots a fireball at the enemy",
-     *         "damage_skill": 40,
-     *         "skill_cost_magic_points": 20
+     *         "description": "Conjures a ball of fire to incinerate",
+     *         "damage_skill": 30,
+     *         "skill_cost_magic_points": 10
      *       }
      *     ]
      *   }
@@ -113,8 +113,8 @@ class GameController extends Controller
      *       {
      *         "id": 1,
      *         "skill_name": "Fireball",
-     *         "damage_skill": 40,
-     *         "skill_cost_magic_points": 20
+     *         "damage_skill": 30,
+     *         "skill_cost_magic_points": 10
      *       }
      *     ]
      *   }

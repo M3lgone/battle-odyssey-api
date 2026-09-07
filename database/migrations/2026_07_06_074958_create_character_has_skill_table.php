@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('character_has_skill', function (Blueprint $table) {
-            $table->foreignId('character_id')->constrained('characters');
-            $table->foreignId('skill_id')->constrained('skills');
+            $table->foreignId('character_id')->constrained('characters')->cascadeOnDelete();
+            $table->foreignId('skill_id')->constrained('skills')->cascadeOnDelete();
             $table->primary(['character_id', 'skill_id']);
         });
     }

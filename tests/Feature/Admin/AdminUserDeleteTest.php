@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use App\Models\Game;
+use App\Models\Battle;
 use Laravel\Passport\Passport;
 
 it('admin can delete any user', function () {
@@ -17,6 +19,46 @@ it('admin can delete any user', function () {
              ->assertJson(['message' => 'User deleted successfully']);
 
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
+});
+
+it('admin can delete a user with related games and battles', function () {
+
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $user = User::factory()->create();
+
+    $game = Game::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $battle = Battle::factory()->create([
+        'game_id' => $game->id,
+    ]);
+
+    $characterId = $battle->character_id;
+
+    Passport::actingAs($admin);
+
+    $response = $this->deleteJson('/api/v1/users/' . $user->id);
+
+    $response->assertStatus(200)
+             ->assertJson(['message' => 'User deleted successfully']);
+
+    $this->assertDatabaseMissing('users', [
+        'id' => $user->id,
+    ]);
+
+    $this->assertDatabaseMissing('games', [
+        'id' => $game->id,
+    ]);
+
+    $this->assertDatabaseMissing('battles', [
+        'id' => $battle->id,
+    ]);
+
+    $this->assertDatabaseHas('characters', [
+        'id' => $characterId,
+    ]);
 });
 
 it('admin cannot delete themselves', function () {

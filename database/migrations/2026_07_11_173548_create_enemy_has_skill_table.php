@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enemy_has_skill', function (Blueprint $table) {
-            $table->foreignId('enemy_id')->constrained('enemies');
-            $table->foreignId('skill_id')->constrained('skills');
+            $table->foreignId('enemy_id')->constrained('enemies')->cascadeOnDelete();
+            $table->foreignId('skill_id')->constrained('skills')->cascadeOnDelete();
             $table->primary(['enemy_id', 'skill_id']);
         });
     }

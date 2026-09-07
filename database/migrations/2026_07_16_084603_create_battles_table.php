@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('battles', function (Blueprint $table) {
             $table->id();
             $table->enum('result', ['win', 'loss', 'flee', 'ongoing']);
-            $table->foreignId('character_id')->constrained('characters');
-            $table->foreignId('game_id')->constrained('games');
+            $table->foreignId('character_id')->constrained('characters')->cascadeOnDelete();
+            $table->foreignId('game_id')->constrained('games')->cascadeOnDelete();
             $table->integer('character_current_hp');
             $table->integer('character_current_mp');
             $table->integer('total_damage_dealt');

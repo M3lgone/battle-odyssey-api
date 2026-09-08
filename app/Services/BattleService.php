@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class BattleService
 {
-    public function startBattle(int $gameId): array
+    public function startBattle(int $gameId, ?int $characterCurrentHp = null, ?int $characterCurrentMp = null): array
     {
         $game = Game::with('character')->findOrFail($gameId);
 
@@ -52,13 +52,17 @@ class BattleService
 
         $character = $game->character;
 
-        $battle = DB::transaction(function () use ($game, $character, $enemy) {
+        $battle = DB::transaction(function () use ($game, $character, $enemy, $characterCurrentHp, $characterCurrentMp) {
             $battle = Battle::create([
                 'game_id' => $game->id,
                 'character_id' => $character->id,
                 'result' => 'ongoing',
-                'character_current_hp' => $character->max_health_points,
-                'character_current_mp' => $character->max_magic_points,
+                'character_current_hp' => $characterCurrentHp !== null
+                    ? min($characterCurrentHp, $character->max_health_points)
+                    : $character->max_health_points,
+                'character_current_mp' => $characterCurrentMp !== null
+                    ? min($characterCurrentMp, $character->max_magic_points)
+                    : $character->max_magic_points,
                 'total_damage_dealt' => 0,
                 'total_damage_received' => 0,
             ]);

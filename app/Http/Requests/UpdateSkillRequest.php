@@ -23,8 +23,8 @@ class UpdateSkillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'skill_name' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|required|string',
+            'skill_name' => 'sometimes|required|string|max:60',
+            'description' => 'sometimes|required|string|max:200',
             'damage_skill' => 'sometimes|required|integer|min:0',
             'skill_cost_magic_points' => 'sometimes|required|integer|min:0',
         ];

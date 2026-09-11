@@ -23,13 +23,13 @@ class UpdateEnemyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'enemy_name' => 'sometimes|required|string|max:255', 
+            'enemy_name' => 'sometimes|required|string|max:45',
             'max_health_points' => 'sometimes|required|integer|min:1',
             'max_magic_points' => 'sometimes|required|integer|min:0',
             'attack' => 'sometimes|required|integer|min:0',
             'defense' => 'sometimes|required|integer|min:0',
-            'enemy_image_url' => 'sometimes|required|string',
-            'background_image_url' => 'sometimes|required|string'
+            'enemy_image_url' => 'sometimes|required|string|max:100',
+            'background_image_url' => 'sometimes|required|string|max:100'
         ];
     }
 }

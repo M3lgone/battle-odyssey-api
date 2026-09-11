@@ -35,7 +35,16 @@ class EnemyController extends Controller
      *     "enemy_image_url": "hydra.png",
      *     "background_image_url": "bg_hydra.png",
      *     "created_at": "2024-05-20T10:00:00.000000Z",
-     *     "updated_at": "2024-05-20T10:00:00.000000Z"
+     *     "updated_at": "2024-05-20T10:00:00.000000Z",
+     *     "skills": [
+     *       {
+     *         "id": 1,
+     *         "skill_name": "Hack",
+     *         "description": "Swings a crude weapon with reckless force",
+     *         "damage_skill": 15,
+     *         "skill_cost_magic_points": 5
+     *       }
+     *     ]
      *   },
      *   {
      *     "id": 2,
@@ -47,7 +56,16 @@ class EnemyController extends Controller
      *     "enemy_image_url": "goblin.png",
      *     "background_image_url": "bg-goblin.png",
      *     "created_at": "2024-05-20T10:00:00.000000Z",
-     *     "updated_at": "2024-05-20T10:00:00.000000Z"
+     *     "updated_at": "2024-05-20T10:00:00.000000Z",
+     *     "skills": [
+     *       {
+     *         "id": 1,
+     *         "skill_name": "Hack",
+     *         "description": "Swings a crude weapon with reckless force",
+     *         "damage_skill": 15,
+     *         "skill_cost_magic_points": 5
+     *       }
+     *     ]
      *   }
      * ]
      * 
@@ -61,7 +79,7 @@ class EnemyController extends Controller
      */
     public function index()
     {
-        $enemies = Enemy::all();
+        $enemies = Enemy::with('skills')->get();
 
         return response()->json($enemies, 200);
     }

@@ -34,7 +34,16 @@ class CharacterController extends Controller
      *     "max_magic_points": 50,
      *     "character_image_url": "warrior.png",
      *     "created_at": "2024-05-20T10:00:00.000000Z",
-     *     "updated_at": "2024-05-20T10:00:00.000000Z"
+     *     "updated_at": "2024-05-20T10:00:00.000000Z",
+     *     "skills": [
+     *       {
+     *         "id": 1,
+     *         "skill_name": "Slash",
+     *         "description": "Strikes the enemy with a swift sword slash",
+     *         "damage_skill": 20,
+     *         "skill_cost_magic_points": 15
+     *       }
+     *     ]
      *   },
      *   {
      *     "id": 2,
@@ -45,7 +54,16 @@ class CharacterController extends Controller
      *     "max_magic_points": 200,
      *     "character_image_url": "mage.png",
      *     "created_at": "2024-05-20T10:00:00.000000Z",
-     *     "updated_at": "2024-05-20T10:00:00.000000Z"
+     *     "updated_at": "2024-05-20T10:00:00.000000Z",
+     *     "skills": [
+     *       {
+     *         "id": 2,
+     *         "skill_name": "Fireball",
+     *         "description": "Shoots a fireball at the enemy",
+     *         "damage_skill": 40,
+     *         "skill_cost_magic_points": 20
+     *       }
+     *     ]
      *   }
      * ]
      * 
@@ -55,7 +73,7 @@ class CharacterController extends Controller
      */
     public function index()
     {
-        $characters = Character::all();
+        $characters = Character::with('skills')->get();
         return response()->json($characters, 200);
     }
 

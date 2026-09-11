@@ -22,4 +22,14 @@ class Character extends Model
     {
         return $this->belongsToMany(Skill::class, 'character_has_skill');
     }
+
+    public function games()
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    public function battles()
+    {
+        return $this->hasMany(Battle::class);
+    }
 }

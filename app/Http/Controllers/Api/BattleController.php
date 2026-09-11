@@ -26,15 +26,19 @@ class BattleController extends Controller
     /**
      * Start a new battle
      * 
-     * Initiates a new battle for a specific active game. The character is the one 
-     * chosen when the game was created and starts every battle fully healed.
-     * The system automatically selects the next enemy based on the number of battles 
-     * already won (e.g., Goblin -> Troll -> Orc). Enemy current HP/MP are stored 
+     * Initiates a new battle for a specific active game. The character is the one
+     * chosen when the game was created. By default the battle starts fully healed,
+     * but HP/MP from the previous battle can be carried over by sending
+     * character_current_hp/mp (Next). Omitting them starts at maximum (Rest & Next).
+     * The system automatically selects the next enemy based on the number of battles
+     * already won (e.g., Goblin -> Troll -> Orc). Enemy current HP/MP are stored
      * per enemy in the battle pivot, ready for future multi-enemy battles.
-     * 
+     *
      * @authenticated
-     * 
+     *
      * @bodyParam game_id integer required The ID of the active game. Must belong to the authenticated user. Example: 1
+     * @bodyParam character_current_hp integer optional HP to start the battle with. Carried over from the previous battle (Next). If omitted, starts at the character maximum (Rest & Next). Minimum: 0. Example: 45
+     * @bodyParam character_current_mp integer optional MP to start the battle with. Carried over from the previous battle (Next). If omitted, starts at the character maximum (Rest & Next). Minimum: 0. Example: 30
      * 
      * @response 201 {
      *   "message": "Battle started successfully!",
@@ -107,7 +111,9 @@ class BattleController extends Controller
     public function store(StoreBattleRequest $request, BattleService $battleService)
     {
         $result = $battleService->startBattle(
-            $request->validated('game_id')
+            $request->validated('game_id'),
+            $request->validated('character_current_hp'),
+            $request->validated('character_current_mp')
         );
         return response()->json($result['payload'], $result['status']);
     }

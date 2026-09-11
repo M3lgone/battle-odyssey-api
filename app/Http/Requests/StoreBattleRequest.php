@@ -30,6 +30,8 @@ class StoreBattleRequest extends FormRequest
     {
         return [
             'game_id' => 'required|exists:games,id',
+            'character_current_hp' => 'nullable|integer|min:0',
+            'character_current_mp' => 'nullable|integer|min:0',
         ];
     }
 }

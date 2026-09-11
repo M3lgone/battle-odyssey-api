@@ -28,7 +28,7 @@ class StoreCharacterRequest extends FormRequest
             'defense' => 'required|integer|min:0',
             'max_health_points' => 'required|integer|min:1',
             'max_magic_points' => 'required|integer|min:0',
-            'character_image_url' => 'required|string'
+            'character_image_url' => 'required|string|max:45'
         ];
     }
 }

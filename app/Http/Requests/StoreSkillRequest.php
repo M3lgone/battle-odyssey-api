@@ -23,8 +23,8 @@ class StoreSkillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'skill_name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'skill_name' => 'required|string|max:60',
+            'description' => 'required|string|max:200',
             'damage_skill' => 'required|integer|min:0',
             'skill_cost_magic_points' => 'required|integer|min:0',
         ];

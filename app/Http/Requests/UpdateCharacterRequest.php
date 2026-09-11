@@ -28,7 +28,7 @@ class UpdateCharacterRequest extends FormRequest
             'defense' => 'sometimes|required|integer|min:0',
             'max_health_points' => 'sometimes|required|integer|min:1',
             'max_magic_points' => 'sometimes|required|integer|min:0',
-            'character_image_url' => 'sometimes|required|string'
+            'character_image_url' => 'sometimes|required|string|max:45'
         ];
     }
 }

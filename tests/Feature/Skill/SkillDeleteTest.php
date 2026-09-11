@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use App\Models\Skill;
+use App\Models\Character;
+use App\Models\Enemy;
 use Laravel\Passport\Passport;
 
 it('admin can delete an existing skill', function () {
@@ -17,6 +19,43 @@ it('admin can delete an existing skill', function () {
     $response->assertStatus(200);
     $this->assertDatabaseMissing('skills', [
         'id' => $skill->id,
+    ]);
+});
+
+it('admin can delete a skill with related characters and enemies', function () {
+
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    Passport::actingAs($admin);
+
+    $skill = Skill::factory()->create();
+    $character = Character::factory()->create();
+    $enemy = Enemy::factory()->create();
+    $character->skills()->attach($skill);
+    $enemy->skills()->attach($skill);
+
+    $response = $this->deleteJson('/api/v1/skills/' . $skill->id);
+
+    $response->assertStatus(200);
+
+    $this->assertDatabaseMissing('skills', [
+        'id' => $skill->id,
+    ]);
+
+    $this->assertDatabaseMissing('character_has_skill', [
+        'skill_id' => $skill->id,
+    ]);
+
+    $this->assertDatabaseMissing('enemy_has_skill', [
+        'skill_id' => $skill->id,
+    ]);
+
+    $this->assertDatabaseHas('characters', [
+        'id' => $character->id,
+    ]);
+
+    $this->assertDatabaseHas('enemies', [
+        'id' => $enemy->id,
     ]);
 });
 

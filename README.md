@@ -29,6 +29,7 @@
 - [Authentication](#-authentication)
 - [Database](#-database)
 - [Getting Started](#-getting-started)
+- [Docker](#-docker)
 - [Tests](#-tests)
 - [API Documentation](#-api-documentation)
 - [Project Structure](#-project-structure)
@@ -319,6 +320,72 @@ Access:
 
 - API → http://localhost:8000/api/v1/
 - Docs → http://localhost:8000/docs
+
+---
+
+## 🐳 Docker
+
+Run the full stack (API + dedicated MySQL 8.4) with only Docker installed.
+No PHP, Composer or MySQL needed on the host. The traditional install above keeps working.
+
+### Prerequisites
+
+- Docker
+- Docker Compose v2 (included in modern Docker Desktop / `docker-compose-plugin`)
+
+### Start from a fresh clone
+
+```bash
+git clone https://github.com/M3lgone/battle-odyssey-api.git
+cd battle-odyssey-api
+cp .env.example .env
+docker compose up --build -d
+```
+
+`compose.yaml` forces the container environment to `DB_CONNECTION=mysql` and
+`DB_HOST=db` (internal service name, port `3306`), so you do **not** need to
+edit `DB_*` in `.env` for Docker. The host MySQL port is `3307` to avoid
+conflicts (`3307:3306`); internally the API always uses `db:3306`.
+
+### Initialize the app (explicit, run once)
+
+```bash
+docker compose ps
+docker compose exec api php artisan key:generate
+docker compose exec api php artisan passport:keys --force
+docker compose exec api php artisan migrate --seed
+```
+
+The container never runs migrations or seeders on its own. `migrate --seed`
+creates the `battle_odyssey_api` schema from the versioned migrations/seeders
+and initializes the Passport personal client.
+
+### Use it
+
+- API → http://localhost:8000/api/v1/
+- Health → http://localhost:8000/up
+- Docs → http://localhost:8000/docs
+- Check containers → `docker compose ps` (wait until `db` is `healthy`)
+- Logs → `docker compose logs -f api` (DB: `docker compose logs -f db`)
+- Any Artisan command → `docker compose exec api php artisan <cmd>`
+  (e.g. `migrate:status`, `route:list`, `tinker`)
+
+### Tests (still SQLite in-memory)
+
+```bash
+docker compose exec api php artisan test
+docker compose exec api php artisan test tests/Feature/Auth/RegisterTest.php
+```
+
+### Stop / reset
+
+```bash
+docker compose down        # stops, keeps project DB volume
+docker compose down -v     # full reset: deletes the project DB volume
+```
+
+> `down -v` deletes the Docker MySQL data of this project. The next `up`
+> starts empty and needs `passport:keys` + `migrate --seed` again.
 
 ---
 

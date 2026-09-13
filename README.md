@@ -330,8 +330,11 @@ No PHP, Composer or MySQL needed on the host. The traditional install above keep
 
 ### Prerequisites
 
-- Docker
+- Docker Engine
 - Docker Compose v2 (included in modern Docker Desktop / `docker-compose-plugin`)
+
+Check with `docker compose version`. If `docker compose` is not recognized,
+install or enable Docker Compose v2 and try again.
 
 ### Start from a fresh clone
 
@@ -386,6 +389,16 @@ docker compose down -v     # full reset: deletes the project DB volume
 
 > `down -v` deletes the Docker MySQL data of this project. The next `up`
 > starts empty and needs `passport:keys` + `migrate --seed` again.
+
+### Troubleshooting
+
+- `docker compose` is not recognized → install or enable Docker Compose v2
+  (`docker compose version` must work before continuing).
+- Start over with a completely clean database:
+  `docker compose down` keeps the MySQL data, while
+  `docker compose down -v` also deletes the project volumes.
+
+  > ⚠️ `down -v` deletes the Docker database data of this project.
 
 ---
 
